@@ -1,0 +1,218 @@
+---
+title: "Model Stacking for Boosted Trees"
+author: "Nan Xiao <<https://nanx.me>>"
+date: "`r Sys.Date()`"
+bibliography: stackgbm.bib
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_float: false
+    toc_depth: 4
+    number_sections: true
+    highlight: "textmate"
+    css: "custom.css"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Model Stacking for Boosted Trees}
+---
+
+# Introduction
+
+Model stacking [@wolpert1992stacked] is a method for ensemble learning that
+combines the strength of multiple base learners to drive up predictive performance.
+It is a particularly popular and effective strategy used in machine learning competitions.
+
+stackgbm implements a two-layer stacking model: the first layer generates
+"features" produced by gradient boosting trees. The boosted tree models are built by
+xgboost [@chen2016xgboost], lightgbm [@ke2017lightgbm], and catboost [@prokhorenkova2018catboost].
+The second layer is a logistic regression that uses these features as inputs.
+
+```{r, message=FALSE}
+library("stackgbm")
+library("msaenet")
+library("pROC")
+```
+
+# Generate data
+
+Let's generate some data for the demo. The simulated data has a $1000 \times 50$
+predictor matrix with a binary outcome vector. 800 samples will be in the
+training set and the rest 200 will be in the (independent) test set.
+25 out of the 50 features will be informative and follows $N(0, 10)$.
+
+```{r}
+dat <- msaenet.sim.binomial(
+  n = 1000, p = 50, rho = 0.6,
+  coef = rnorm(25, 0, 10), snr = 1, p.train = 0.8,
+  seed = 1001
+)
+
+x_tr <- dat$x.tr
+y_tr <- as.vector(dat$y.tr)
+x_te <- dat$x.te
+y_te <- as.vector(dat$y.te)
+```
+
+# Parameter tuning
+
+`cv_xgboost()`, `cv_lightgbm()` and `cv_catboost()` provide wrappers for
+tuning the most essential hyperparameters for each type of boosted tree models
+with k-fold cross-validation. The "optimal" parameters will be
+used to fit the stacking model later.
+
+```{r, eval=FALSE}
+params_xgb <- cv_xgboost(x_tr, y_tr)
+params_lgb <- cv_lightgbm(x_tr, y_tr)
+params_cat <- cv_catboost(x_tr, y_tr)
+```
+
+```{r, eval=FALSE, echo=FALSE}
+saveRDS(params_xgb, file = "params_xgb.rds")
+saveRDS(params_lgb, file = "params_lgb.rds")
+saveRDS(params_cat, file = "params_cat.rds")
+```
+
+```{r, echo=FALSE}
+params_xgb <- readRDS("params_xgb.rds")
+params_lgb <- readRDS("params_lgb.rds")
+params_cat <- readRDS("params_cat.rds")
+```
+
+# Training
+
+```{r}
+model_stack <- stackgbm(
+  dat$x.tr, dat$y.tr,
+  params = list(
+    xgb.nrounds = params_xgb$nrounds,
+    xgb.learning_rate = params_xgb$learning_rate,
+    xgb.max_depth = params_xgb$max_depth,
+    lgb.num_iterations = params_lgb$num_iterations,
+    lgb.max_depth = params_lgb$max_depth,
+    lgb.learning_rate = params_lgb$learning_rate,
+    cat.iterations = params_cat$iterations,
+    cat.depth = params_cat$depth
+  )
+)
+```
+
+# Inference
+
+```{r}
+roc_stack_tr <- roc(y_tr, predict(model_stack, x_tr)$prob, quiet = TRUE)
+roc_stack_te <- roc(y_te, predict(model_stack, x_te)$prob, quiet = TRUE)
+roc_stack_tr$auc
+roc_stack_te$auc
+```
+
+# Performance benchmarking
+
+Let's compare the predictive performance between the stacking model and
+the three types of tree boosting models (base learners) fitted individually:
+
+```{r, message=FALSE}
+library("xgboost")
+library("lightgbm")
+library("catboost")
+
+model_xgb <- xgb.train(
+  params = list(
+    objective = "binary:logistic",
+    eval_metric = "auc",
+    max_depth = params_xgb$max_depth,
+    eta = params_xgb$learning_rate
+  ),
+  data = xgb.DMatrix(x_tr, label = y_tr),
+  nrounds = params_xgb$nrounds
+)
+
+model_lgb <- lightgbm(
+  data = x_tr,
+  label = y_tr,
+  objective = "binary",
+  learning_rate = params_lgb$learning_rate,
+  num_iterations = params_lgb$num_iterations,
+  max_depth = params_lgb$max_depth,
+  num_leaves = 2^params_lgb$max_depth - 1,
+  verbose = -1
+)
+
+model_cat <- catboost.train(
+  catboost.load_pool(data = x_tr, label = y_tr), NULL,
+  params = list(
+    loss_function = "Logloss",
+    iterations = params_cat$iterations,
+    depth = params_cat$depth,
+    logging_level = "Silent"
+  )
+)
+```
+
+xgboost:
+
+```{r}
+roc_xgb_tr <- roc(y_tr, predict(model_xgb, x_tr), quiet = TRUE)
+roc_xgb_te <- roc(y_te, predict(model_xgb, x_te), quiet = TRUE)
+roc_xgb_tr$auc
+roc_xgb_te$auc
+```
+
+lightgbm:
+
+```{r}
+roc_lgb_tr <- roc(y_tr, predict(model_lgb, x_tr), quiet = TRUE)
+roc_lgb_te <- roc(y_te, predict(model_lgb, x_te), quiet = TRUE)
+roc_lgb_tr$auc
+roc_lgb_te$auc
+```
+
+catboost:
+
+```{r}
+roc_cat_tr <- roc(y_tr, catboost.predict(model_cat, catboost.load_pool(data = x_tr, label = NULL)), quiet = TRUE)
+roc_cat_te <- roc(y_te, catboost.predict(model_cat, catboost.load_pool(data = x_te, label = NULL)), quiet = TRUE)
+roc_cat_tr$auc
+roc_cat_te$auc
+```
+
+Summarize the AUC values in a table:
+
+```{r, echo=FALSE}
+df <- as.data.frame(matrix(NA, ncol = 4, nrow = 2))
+names(df) <- c("stackgbm", "xgboost", "lightgbm", "catboost")
+rownames(df) <- c("Training", "Testing")
+
+df$stackgbm <- c(roc_stack_tr$auc, roc_stack_te$auc)
+df$xgboost <- c(roc_xgb_tr$auc, roc_xgb_te$auc)
+df$lightgbm <- c(roc_lgb_tr$auc, roc_lgb_te$auc)
+df$catboost <- c(roc_cat_tr$auc, roc_cat_te$auc)
+
+knitr::kable(df, digits = 4, caption = "AUC values from four models on training and testing set")
+```
+
+Plot the ROC curves on the independent test set:
+
+```{r, message=FALSE, fig.asp = 1}
+library("ggsci")
+pal <- pal_aaas()(4)
+
+plot(smooth(roc_stack_te), col = pal[1])
+plot(smooth(roc_xgb_te), col = pal[2], add = TRUE)
+plot(smooth(roc_lgb_te), col = pal[3], add = TRUE)
+plot(smooth(roc_cat_te), col = pal[4], add = TRUE)
+legend("bottomright", legend = c("stackgbm", "xgboost", "lightgbm", "catboost"), col = pal, lwd = 2)
+```
+
+# Notes on categorical features
+
+[xgboost](https://cran.r-project.org/web/packages/xgboost/vignettes/discoverYourData.html#conversion-from-categorical-to-numeric-variables)
+and [lightgbm](https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html#categorical-feature-support)
+both prefer the categorical features to be encoded as integers.
+For [catboost](https://catboost.ai/docs/concepts/algorithm-main-stages_cat-to-numberic.html),
+the categorical features can be encoded as character factors.
+
+To avoid possible confusions, if your data has any categorical features,
+we recommend converting them to integers or use one-hot encoding, and
+use a numerical matrix as the input.
+
+# References

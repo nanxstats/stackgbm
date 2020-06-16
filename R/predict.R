@@ -1,0 +1,52 @@
+#' Make predictions from a stackgbm model object
+#'
+#' @param object stackgbm model object
+#' @param newx New predictor matrix
+#' @param threshold Decision threshold. Default is 0.5.
+#' @param classes The class encoding vector of the predicted outcome.
+#' The naming and order will be respected.
+#' @param ... unused
+#'
+#' @return A list of two vectors presenting the predicted classification
+#' probabilities and predicted response.
+#'
+#' @method predict stackgbm
+#'
+#' @importFrom xgboost xgb.DMatrix
+#' @importFrom catboost catboost.load_pool catboost.predict
+#' @importFrom stats predict
+#'
+#' @export
+#'
+#' @examples
+#' # check the vignette for code examples
+predict.stackgbm <- function(object, newx, threshold = 0.5, classes = c(1L, 0L), ...) {
+  nrow_newx <- nrow(newx)
+  nfolds <- length(object$model_xgb)
+
+  pred_xgb <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
+  pred_lgb <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
+  pred_cat <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
+
+  newx_xgb <- as.matrix(newx)
+  newx_xgb <- xgb.DMatrix(newx_xgb)
+  for (i in 1L:nfolds) pred_xgb[, i] <- predict(object$model_xgb[[i]], newx_xgb)
+
+  newx_lgb <- as.matrix(newx)
+  for (i in 1L:nfolds) pred_lgb[, i] <- predict(object$model_lgb[[i]], newx_lgb)
+
+  newx_cat <- newx
+  newx_cat <- catboost.load_pool(data = newx_cat, label = NULL)
+  for (i in 1L:nfolds) pred_cat[, i] <- catboost.predict(object$model_cat[[i]], newx_cat, prediction_type = "Probability")
+
+  newx_glm <- data.frame(
+    "xgb" = rowMeans(pred_xgb),
+    "lgb" = rowMeans(pred_lgb),
+    "cat" = rowMeans(pred_cat)
+  )
+
+  pred_prob <- unname(predict(object$model_glm, newx_glm, type = "response"))
+  pred_resp <- ifelse(pred_prob > threshold, classes[1], classes[2])
+
+  list("prob" = pred_prob, "resp" = pred_resp)
+}

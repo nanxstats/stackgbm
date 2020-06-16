@@ -1,0 +1,29 @@
+Package: stackgbm
+Type: Package
+Title: Stacked Gradient Boosting Machines
+Version: 0.1.0
+Authors@R: c(
+    person("Nan", "Xiao", email = "me@nanx.me", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0250-5673")))
+Maintainer: Nan Xiao <me@nanx.me>
+Description: A minimalist implementation of model stacking
+    for boosted tree models built by 'xgboost', 'lightgbm', and 'catboost'.
+License: GPL-3
+URL: https://nanx.me/stackgbm/, https://github.com/nanxstats/stackgbm
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+BugReports: https://github.com/nanxstats/stackgbm/issues
+Depends: R (>= 3.5.0)
+Imports:
+    xgboost,
+    lightgbm,
+    catboost,
+    progress
+Suggests:
+    knitr,
+    rmarkdown,
+    msaenet,
+    ggsci,
+    pROC
+RoxygenNote: 7.1.0

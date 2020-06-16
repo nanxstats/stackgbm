@@ -1,0 +1,12 @@
+reference:
+  - title: "Training"
+    contents:
+      - stackgbm
+  - title: "Inference"
+    contents:
+      - predict.stackgbm
+  - title: "Parameter tuning"
+    contents:
+      - cv_xgboost
+      - cv_lightgbm
+      - cv_catboost
