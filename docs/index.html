@@ -74,21 +74,14 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
 <div id="stackgbm" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#stackgbm" class="anchor"></a>stackgbm</h1></div>
 
 <p>stackgbm offers a minimalist implementation of model stacking (<a href="https://doi.org/10.1016/S0893-6080(05)80023-1">Wolpert, 1992</a>) for gradient boosted tree models built by xgboost (<a href="https://doi.org/10.1145/2939672.2939785">Chen and Guestrin, 2016</a>), lightgbm (<a href="https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision">Ke et al., 2017</a>), and catboost (<a href="https://papers.nips.cc/paper/7898-catboost-unbiased-boosting-with-categorical-features">Prokhorenkova et al., 2018</a>).</p>
-</div>
-<div id="design" class="section level1">
-<h1 class="hasAnchor">
-<a href="#design" class="anchor"></a>Design</h1>
-<p>stackgbm implements a classic two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is derived from our <a href="https://github.com/nanxstats/bcpm-msaenet">2nd place solution</a> for a precisionFDA brain cancer machine learning challenge in 2020.</p>
-<p>To make sure the package is easy to understand, modify, and extend, we choose to build this package with base R without any special frameworks or dialects. We also only exposed the most essential tunable parameters for the boosted tree models (learning rate, maximum depth of a tree, and number of iterations).</p>
-<div id="installation" class="section level2">
+<div id="install" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<a href="#install" class="anchor"></a>Install</h2>
 <p>Install from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"nanxstats/stackgbm"</span>)</pre></div>
 <p>As of June 2020, all of the depended R packages are installable from CRAN, except for:</p>
@@ -97,13 +90,18 @@
 <li>catboost: follow the official <a href="https://catboost.ai/docs/concepts/r-installation.html">installation guide</a>.</li>
 </ul>
 </div>
+<div id="design" class="section level2">
+<h2 class="hasAnchor">
+<a href="#design" class="anchor"></a>Design</h2>
+<p>stackgbm implements a classic two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is derived from our <a href="https://github.com/nanxstats/bcpm-msaenet">2nd place solution</a> for a precisionFDA brain cancer machine learning challenge in 2020.</p>
+<p>To make sure the package is easy to understand, modify, and extend, we choose to build this package with base R without any special frameworks or dialects. We also only exposed the most essential tunable parameters for the boosted tree models (learning rate, maximum depth of a tree, and number of iterations).</p>
+</div>
 <div id="license" class="section level2">
 <h2 class="hasAnchor">
 <a href="#license" class="anchor"></a>License</h2>
 <p>stackgbm is free and open source software, licensed under GPL-3.</p>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
