@@ -82,13 +82,13 @@
 <div id="install" class="section level2">
 <h2 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h2>
-<p>Install from GitHub:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"nanxstats/stackgbm"</span>)</pre></div>
-<p>As of June 2020, all of the depended R packages are installable from CRAN, except for:</p>
+<p>First, make sure to install two R packages that are not yet available from CRAN as of June 2020:</p>
 <ul>
 <li>lightgbm: follow the official <a href="https://github.com/microsoft/LightGBM/tree/master/R-package">installation guide</a>.</li>
 <li>catboost: follow the official <a href="https://catboost.ai/docs/concepts/r-installation.html">installation guide</a>.</li>
 </ul>
+<p>Then install stackgbm from GitHub:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"nanxstats/stackgbm"</span>)</pre></div>
 </div>
 <div id="design" class="section level2">
 <h2 class="hasAnchor">
