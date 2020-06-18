@@ -6,16 +6,16 @@ stackgbm offers a minimalist implementation of model stacking ([Wolpert, 1992](h
 
 ## Install
 
-Install from GitHub:
+First, make sure to install two R packages that are not yet available from CRAN as of June 2020:
+
+- lightgbm: follow the official [installation guide](https://github.com/microsoft/LightGBM/tree/master/R-package).
+- catboost: follow the official [installation guide](https://catboost.ai/docs/concepts/r-installation.html).
+
+Then install stackgbm from GitHub:
 
 ```r
 remotes::install_github("nanxstats/stackgbm")
 ```
-
-As of June 2020, all of the depended R packages are installable from CRAN, except for:
-
-- lightgbm: follow the official [installation guide](https://github.com/microsoft/LightGBM/tree/master/R-package).
-- catboost: follow the official [installation guide](https://catboost.ai/docs/concepts/r-installation.html).
 
 ## Design
 
