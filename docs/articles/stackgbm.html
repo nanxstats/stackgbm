@@ -40,7 +40,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -57,7 +57,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/nanxstats/stackgbm/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -71,13 +71,13 @@
 
       
 
-      </header><script src="stackgbm_files/header-attrs-2.2/header-attrs.js"></script><div class="row">
+      </header><script src="stackgbm_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Model Stacking for Boosted Trees</h1>
                         <h4 class="author">Nan Xiao &lt;<a href="https://nanx.me" class="uri">https://nanx.me</a>&gt;</h4>
             
-            <h4 class="date">2020-06-18</h4>
+            <h4 class="date">2020-12-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nanxstats/stackgbm/blob/master/vignettes/stackgbm.Rmd"><code>vignettes/stackgbm.Rmd</code></a></small>
       <div class="hidden name"><code>stackgbm.Rmd</code></div>
@@ -91,125 +91,138 @@
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Model stacking <span class="citation">(Wolpert 1992)</span> is a method for ensemble learning that combines the strength of multiple base learners to drive up predictive performance. It is a particularly popular and effective strategy used in machine learning competitions.</p>
 <p>stackgbm implements a two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The boosted tree models are built by xgboost <span class="citation">(Chen and Guestrin 2016)</span>, lightgbm <span class="citation">(Ke et al. 2017)</span>, and catboost <span class="citation">(Prokhorenkova et al. 2018)</span>. The second layer is a logistic regression that uses these features as inputs.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"stackgbm"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"msaenet"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"pROC"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/stackgbm/">"stackgbm"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/msaenet/">"msaenet"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://expasy.org/tools/pROC/">"pROC"</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="generate-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#generate-data" class="anchor"></a>Generate data</h1>
 <p>Let’s generate some data for the demo. The simulated data has a <span class="math inline">\(1000 \times 50\)</span> predictor matrix with a binary outcome vector. 800 samples will be in the training set and the rest 200 will be in the (independent) test set. 25 out of the 50 features will be informative and follows <span class="math inline">\(N(0, 10)\)</span>.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/msaenet/man/msaenet.sim.binomial.html">msaenet.sim.binomial</a></span>(
-  <span class="kw">n</span> <span class="kw">=</span> <span class="fl">1000</span>, <span class="kw">p</span> <span class="kw">=</span> <span class="fl">50</span>, <span class="kw">rho</span> <span class="kw">=</span> <span class="fl">0.6</span>,
-  <span class="kw">coef</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">25</span>, <span class="fl">0</span>, <span class="fl">10</span>), <span class="kw">snr</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">p.train</span> <span class="kw">=</span> <span class="fl">0.8</span>,
-  <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1001</span>
-)
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html">msaenet.sim.binomial</a></span><span class="op">(</span>
+  n <span class="op">=</span> <span class="fl">1000</span>, p <span class="op">=</span> <span class="fl">50</span>, rho <span class="op">=</span> <span class="fl">0.6</span>,
+  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, snr <span class="op">=</span> <span class="fl">1</span>, p.train <span class="op">=</span> <span class="fl">0.8</span>,
+  seed <span class="op">=</span> <span class="fl">1001</span>
+<span class="op">)</span>
 
-<span class="no">x_tr</span> <span class="kw">&lt;-</span> <span class="no">dat</span>$<span class="no">x.tr</span>
-<span class="no">y_tr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span>(<span class="no">dat</span>$<span class="no">y.tr</span>)
-<span class="no">x_te</span> <span class="kw">&lt;-</span> <span class="no">dat</span>$<span class="no">x.te</span>
-<span class="no">y_te</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span>(<span class="no">dat</span>$<span class="no">y.te</span>)</pre></body></html></div>
+<span class="va">x_tr</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">x.tr</span>
+<span class="va">y_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span>
+<span class="va">x_te</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">x.te</span>
+<span class="va">y_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">y.te</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="parameter-tuning" class="section level1">
 <h1 class="hasAnchor">
 <a href="#parameter-tuning" class="anchor"></a>Parameter tuning</h1>
 <p><code><a href="../reference/cv_xgboost.html">cv_xgboost()</a></code>, <code><a href="../reference/cv_lightgbm.html">cv_lightgbm()</a></code> and <code><a href="../reference/cv_catboost.html">cv_catboost()</a></code> provide wrappers for tuning the most essential hyperparameters for each type of boosted tree models with k-fold cross-validation. The “optimal” parameters will be used to fit the stacking model later.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">params_xgb</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cv_xgboost.html">cv_xgboost</a></span>(<span class="no">x_tr</span>, <span class="no">y_tr</span>)
-<span class="no">params_lgb</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cv_lightgbm.html">cv_lightgbm</a></span>(<span class="no">x_tr</span>, <span class="no">y_tr</span>)
-<span class="no">params_cat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cv_catboost.html">cv_catboost</a></span>(<span class="no">x_tr</span>, <span class="no">y_tr</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">params_xgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_xgboost.html">cv_xgboost</a></span><span class="op">(</span><span class="va">x_tr</span>, <span class="va">y_tr</span><span class="op">)</span>
+<span class="va">params_lgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_lightgbm.html">cv_lightgbm</a></span><span class="op">(</span><span class="va">x_tr</span>, <span class="va">y_tr</span><span class="op">)</span>
+<span class="va">params_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_catboost.html">cv_catboost</a></span><span class="op">(</span><span class="va">x_tr</span>, <span class="va">y_tr</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="training" class="section level1">
 <h1 class="hasAnchor">
 <a href="#training" class="anchor"></a>Training</h1>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">model_stack</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/stackgbm.html">stackgbm</a></span>(
-  <span class="no">dat</span>$<span class="no">x.tr</span>, <span class="no">dat</span>$<span class="no">y.tr</span>,
-  <span class="kw">params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-    <span class="kw">xgb.nrounds</span> <span class="kw">=</span> <span class="no">params_xgb</span>$<span class="no">nrounds</span>,
-    <span class="kw">xgb.learning_rate</span> <span class="kw">=</span> <span class="no">params_xgb</span>$<span class="no">learning_rate</span>,
-    <span class="kw">xgb.max_depth</span> <span class="kw">=</span> <span class="no">params_xgb</span>$<span class="no">max_depth</span>,
-    <span class="kw">lgb.num_iterations</span> <span class="kw">=</span> <span class="no">params_lgb</span>$<span class="no">num_iterations</span>,
-    <span class="kw">lgb.max_depth</span> <span class="kw">=</span> <span class="no">params_lgb</span>$<span class="no">max_depth</span>,
-    <span class="kw">lgb.learning_rate</span> <span class="kw">=</span> <span class="no">params_lgb</span>$<span class="no">learning_rate</span>,
-    <span class="kw">cat.iterations</span> <span class="kw">=</span> <span class="no">params_cat</span>$<span class="no">iterations</span>,
-    <span class="kw">cat.depth</span> <span class="kw">=</span> <span class="no">params_cat</span>$<span class="no">depth</span>
-  )
-)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model_stack</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stackgbm.html">stackgbm</a></span><span class="op">(</span>
+  <span class="va">dat</span><span class="op">$</span><span class="va">x.tr</span>, <span class="va">dat</span><span class="op">$</span><span class="va">y.tr</span>,
+  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    xgb.nrounds <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">nrounds</span>,
+    xgb.learning_rate <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">learning_rate</span>,
+    xgb.max_depth <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">max_depth</span>,
+    lgb.num_iterations <span class="op">=</span> <span class="va">params_lgb</span><span class="op">$</span><span class="va">num_iterations</span>,
+    lgb.max_depth <span class="op">=</span> <span class="va">params_lgb</span><span class="op">$</span><span class="va">max_depth</span>,
+    lgb.learning_rate <span class="op">=</span> <span class="va">params_lgb</span><span class="op">$</span><span class="va">learning_rate</span>,
+    cat.iterations <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">iterations</span>,
+    cat.depth <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">depth</span>
+  <span class="op">)</span>
+<span class="op">)</span></code></pre></div>
 </div>
 <div id="inference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#inference" class="anchor"></a>Inference</h1>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">roc_stack_tr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_tr</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">model_stack</span>, <span class="no">x_tr</span>)$<span class="no">prob</span>, <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_stack_te</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_te</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">model_stack</span>, <span class="no">x_te</span>)$<span class="no">prob</span>, <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_stack_tr</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_stack_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_tr</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_stack</span>, <span class="va">x_tr</span><span class="op">)</span><span class="op">$</span><span class="va">prob</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_stack_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_te</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_stack</span>, <span class="va">x_te</span><span class="op">)</span><span class="op">$</span><span class="va">prob</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_stack_tr</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.9955</code></pre>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">roc_stack_te</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_stack_te</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.789</code></pre>
 </div>
 <div id="performance-benchmarking" class="section level1">
 <h1 class="hasAnchor">
 <a href="#performance-benchmarking" class="anchor"></a>Performance benchmarking</h1>
 <p>Let’s compare the predictive performance between the stacking model and the three types of tree boosting models (base learners) fitted individually:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"xgboost"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"lightgbm"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"catboost"</span>)
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/dmlc/xgboost">"xgboost"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/Microsoft/LightGBM">"lightgbm"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://catboost.ai/">"catboost"</a></span><span class="op">)</span>
 
-<span class="no">model_xgb</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgb.train.html">xgb.train</a></span>(
-  <span class="kw">params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-    <span class="kw">objective</span> <span class="kw">=</span> <span class="st">"binary:logistic"</span>,
-    <span class="kw">eval_metric</span> <span class="kw">=</span> <span class="st">"auc"</span>,
-    <span class="kw">max_depth</span> <span class="kw">=</span> <span class="no">params_xgb</span>$<span class="no">max_depth</span>,
-    <span class="kw">eta</span> <span class="kw">=</span> <span class="no">params_xgb</span>$<span class="no">learning_rate</span>
-  ),
-  <span class="kw">data</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgb.DMatrix.html">xgb.DMatrix</a></span>(<span class="no">x_tr</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">y_tr</span>),
-  <span class="kw">nrounds</span> <span class="kw">=</span> <span class="no">params_xgb</span>$<span class="no">nrounds</span>
-)
+<span class="va">model_xgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgb.train.html">xgb.train</a></span><span class="op">(</span>
+  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    objective <span class="op">=</span> <span class="st">"binary:logistic"</span>,
+    eval_metric <span class="op">=</span> <span class="st">"auc"</span>,
+    max_depth <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">max_depth</span>,
+    eta <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">learning_rate</span>
+  <span class="op">)</span>,
+  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgb.DMatrix.html">xgb.DMatrix</a></span><span class="op">(</span><span class="va">x_tr</span>, label <span class="op">=</span> <span class="va">y_tr</span><span class="op">)</span>,
+  nrounds <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">nrounds</span>
+<span class="op">)</span>
 
-<span class="no">model_lgb</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lightgbm/man/lightgbm.html">lightgbm</a></span>(
-  <span class="kw">data</span> <span class="kw">=</span> <span class="no">x_tr</span>,
-  <span class="kw">label</span> <span class="kw">=</span> <span class="no">y_tr</span>,
-  <span class="kw">objective</span> <span class="kw">=</span> <span class="st">"binary"</span>,
-  <span class="kw">learning_rate</span> <span class="kw">=</span> <span class="no">params_lgb</span>$<span class="no">learning_rate</span>,
-  <span class="kw">num_iterations</span> <span class="kw">=</span> <span class="no">params_lgb</span>$<span class="no">num_iterations</span>,
-  <span class="kw">max_depth</span> <span class="kw">=</span> <span class="no">params_lgb</span>$<span class="no">max_depth</span>,
-  <span class="kw">num_leaves</span> <span class="kw">=</span> <span class="fl">2</span>^<span class="no">params_lgb</span>$<span class="no">max_depth</span> - <span class="fl">1</span>,
-  <span class="kw">verbose</span> <span class="kw">=</span> -<span class="fl">1</span>
-)
+<span class="va">model_lgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lightgbm/man/lightgbm.html">lightgbm</a></span><span class="op">(</span>
+  data <span class="op">=</span> <span class="va">x_tr</span>,
+  label <span class="op">=</span> <span class="va">y_tr</span>,
+  objective <span class="op">=</span> <span class="st">"binary"</span>,
+  learning_rate <span class="op">=</span> <span class="va">params_lgb</span><span class="op">$</span><span class="va">learning_rate</span>,
+  num_iterations <span class="op">=</span> <span class="va">params_lgb</span><span class="op">$</span><span class="va">num_iterations</span>,
+  max_depth <span class="op">=</span> <span class="va">params_lgb</span><span class="op">$</span><span class="va">max_depth</span>,
+  num_leaves <span class="op">=</span> <span class="fl">2</span><span class="op">^</span><span class="va">params_lgb</span><span class="op">$</span><span class="va">max_depth</span> <span class="op">-</span> <span class="fl">1</span>,
+  verbose <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>
+<span class="op">)</span>
 
-<span class="no">model_cat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.train.html">catboost.train</a></span>(
-  <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html">catboost.load_pool</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">x_tr</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">y_tr</span>), <span class="kw">NULL</span>,
-  <span class="kw">params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-    <span class="kw">loss_function</span> <span class="kw">=</span> <span class="st">"Logloss"</span>,
-    <span class="kw">iterations</span> <span class="kw">=</span> <span class="no">params_cat</span>$<span class="no">iterations</span>,
-    <span class="kw">depth</span> <span class="kw">=</span> <span class="no">params_cat</span>$<span class="no">depth</span>,
-    <span class="kw">logging_level</span> <span class="kw">=</span> <span class="st">"Silent"</span>
-  )
-)</pre></body></html></div>
+<span class="va">model_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.train.html">catboost.train</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html">catboost.load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_tr</span>, label <span class="op">=</span> <span class="va">y_tr</span><span class="op">)</span>, <span class="cn">NULL</span>,
+  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    loss_function <span class="op">=</span> <span class="st">"Logloss"</span>,
+    iterations <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">iterations</span>,
+    depth <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">depth</span>,
+    logging_level <span class="op">=</span> <span class="st">"Silent"</span>
+  <span class="op">)</span>
+<span class="op">)</span></code></pre></div>
 <p>xgboost:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">roc_xgb_tr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_tr</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">model_xgb</span>, <span class="no">x_tr</span>), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_xgb_te</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_te</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">model_xgb</span>, <span class="no">x_te</span>), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_xgb_tr</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_xgb_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_tr</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_xgb</span>, <span class="va">x_tr</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_xgb_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_te</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_xgb</span>, <span class="va">x_te</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_xgb_tr</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 1</code></pre>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">roc_xgb_te</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_xgb_te</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.7736</code></pre>
 <p>lightgbm:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">roc_lgb_tr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_tr</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">model_lgb</span>, <span class="no">x_tr</span>), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_lgb_te</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_te</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">model_lgb</span>, <span class="no">x_te</span>), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_lgb_tr</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_lgb_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_tr</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_lgb</span>, <span class="va">x_tr</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_lgb_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_te</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_lgb</span>, <span class="va">x_te</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_lgb_tr</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.9202</code></pre>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">roc_lgb_te</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_lgb_te</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.7626</code></pre>
 <p>catboost:</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">roc_cat_tr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_tr</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.predict.html">catboost.predict</a></span>(<span class="no">model_cat</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html">catboost.load_pool</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">x_tr</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="kw">NULL</span>)), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_cat_te</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span>(<span class="no">y_te</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.predict.html">catboost.predict</a></span>(<span class="no">model_cat</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html">catboost.load_pool</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">x_te</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="kw">NULL</span>)), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">roc_cat_tr</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_cat_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_tr</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.predict.html">catboost.predict</a></span><span class="op">(</span><span class="va">model_cat</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html">catboost.load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_tr</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_cat_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html">roc</a></span><span class="op">(</span><span class="va">y_te</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.predict.html">catboost.predict</a></span><span class="op">(</span><span class="va">model_cat</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html">catboost.load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_te</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">roc_cat_tr</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.992</code></pre>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">roc_cat_te</span>$<span class="no">auc</span></pre></body></html></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">roc_cat_te</span><span class="op">$</span><span class="va">auc</span></code></pre></div>
 <pre><code>## Area under the curve: 0.7757</code></pre>
 <p>Summarize the AUC values in a table:</p>
 <table class="table">
 <caption>AUC values from four models on training and testing set</caption>
 <thead><tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="right">stackgbm</th>
 <th align="right">xgboost</th>
 <th align="right">lightgbm</th>
@@ -217,14 +230,14 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Training</td>
+<td align="left">Training</td>
 <td align="right">0.9955</td>
 <td align="right">1.0000</td>
 <td align="right">0.9202</td>
 <td align="right">0.9920</td>
 </tr>
 <tr class="even">
-<td>Testing</td>
+<td align="left">Testing</td>
 <td align="right">0.7890</td>
 <td align="right">0.7736</td>
 <td align="right">0.7626</td>
@@ -233,14 +246,15 @@
 </tbody>
 </table>
 <p>Plot the ROC curves on the independent test set:</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"ggsci"</span>)
-<span class="no">pal</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggsci/man/pal_aaas.html">pal_aaas</a></span>()(<span class="fl">4</span>)
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/">"ggsci"</a></span><span class="op">)</span>
+<span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nanx.me/ggsci/reference/pal_aaas.html">pal_aaas</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span>(<span class="no">roc_stack_te</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="no">pal</span>[<span class="fl">1</span>])
-<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span>(<span class="no">roc_xgb_te</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="no">pal</span>[<span class="fl">2</span>], <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span>(<span class="no">roc_lgb_te</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="no">pal</span>[<span class="fl">3</span>], <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span>(<span class="no">roc_cat_te</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="no">pal</span>[<span class="fl">4</span>], <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span>(<span class="st">"bottomright"</span>, <span class="kw">legend</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"stackgbm"</span>, <span class="st">"xgboost"</span>, <span class="st">"lightgbm"</span>, <span class="st">"catboost"</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="no">pal</span>, <span class="kw">lwd</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span><span class="op">(</span><span class="va">roc_stack_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span><span class="op">(</span><span class="va">roc_xgb_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span><span class="op">(</span><span class="va">roc_lgb_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/pROC/man/plot.roc.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/smooth.html">smooth</a></span><span class="op">(</span><span class="va">roc_cat_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"bottomright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"stackgbm"</span>, <span class="st">"xgboost"</span>, <span class="st">"lightgbm"</span>, <span class="st">"catboost"</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="stackgbm_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
 <div id="notes-on-categorical-features" class="section level1">
@@ -252,18 +266,18 @@
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<div id="refs" class="references hanging-indent">
-<div id="ref-chen2016xgboost">
-<p>Chen, Tianqi, and Carlos Guestrin. 2016. “XGBoost: A Scalable Tree Boosting System.” In <em>Proceedings of the 22nd Acm Sigkdd International Conference on Knowledge Discovery and Data Mining</em>, 785–94. ACM.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-chen2016xgboost" class="csl-entry">
+Chen, Tianqi, and Carlos Guestrin. 2016. <span>“<span>XGBoost</span>: A Scalable Tree Boosting System.”</span> In <em>Proceedings of the 22nd Acm Sigkdd International Conference on Knowledge Discovery and Data Mining</em>, 785–94. ACM.
 </div>
-<div id="ref-ke2017lightgbm">
-<p>Ke, Guolin, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. 2017. “LightGBM: A Highly Efficient Gradient Boosting Decision Tree.” In <em>Advances in Neural Information Processing Systems</em>, 3146–54.</p>
+<div id="ref-ke2017lightgbm" class="csl-entry">
+Ke, Guolin, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. 2017. <span>“<span>LightGBM</span>: A Highly Efficient Gradient Boosting Decision Tree.”</span> In <em>Advances in Neural Information Processing Systems</em>, 3146–54.
 </div>
-<div id="ref-prokhorenkova2018catboost">
-<p>Prokhorenkova, Liudmila, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, and Andrey Gulin. 2018. “CatBoost: Unbiased Boosting with Categorical Features.” In <em>Advances in Neural Information Processing Systems</em>, 6638–48.</p>
+<div id="ref-prokhorenkova2018catboost" class="csl-entry">
+Prokhorenkova, Liudmila, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, and Andrey Gulin. 2018. <span>“<span>CatBoost</span>: Unbiased Boosting with Categorical Features.”</span> In <em>Advances in Neural Information Processing Systems</em>, 6638–48.
 </div>
-<div id="ref-wolpert1992stacked">
-<p>Wolpert, David H. 1992. “Stacked Generalization.” <em>Neural Networks</em> 5 (2): 241–59.</p>
+<div id="ref-wolpert1992stacked" class="csl-entry">
+Wolpert, David H. 1992. <span>“Stacked Generalization.”</span> <em>Neural Networks</em> 5 (2): 241–59.
 </div>
 </div>
 </div>
@@ -284,7 +298,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
