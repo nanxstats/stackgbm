@@ -1,7 +1,6 @@
 ---
 title: "Model Stacking for Boosted Trees"
 author: "Nan Xiao <<https://nanx.me>>"
-date: "`r Sys.Date()`"
 bibliography: stackgbm.bib
 output:
   rmarkdown::html_document:
