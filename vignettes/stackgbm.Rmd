@@ -7,7 +7,7 @@ output:
     toc: true
     toc_float: false
     toc_depth: 4
-    number_sections: true
+    number_sections: false
     highlight: "textmate"
     css: "custom.css"
 vignette: >
@@ -15,7 +15,14 @@ vignette: >
   %\VignetteIndexEntry{Model Stacking for Boosted Trees}
 ---
 
-# Introduction
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  collapse = TRUE
+)
+```
+
+## Introduction
 
 Model stacking [@wolpert1992stacked] is a method for ensemble learning that
 combines the strength of multiple base learners to drive up predictive performance.
@@ -32,7 +39,7 @@ library("msaenet")
 library("pROC")
 ```
 
-# Generate data
+## Generate data
 
 Let's generate some data for the demo. The simulated data has a $1000 \times 50$
 predictor matrix with a binary outcome vector. 800 samples will be in the
@@ -52,7 +59,7 @@ x_te <- dat$x.te
 y_te <- as.vector(dat$y.te)
 ```
 
-# Parameter tuning
+## Parameter tuning
 
 `cv_xgboost()`, `cv_lightgbm()` and `cv_catboost()` provide wrappers for
 tuning the most essential hyperparameters for each type of boosted tree models
@@ -77,7 +84,7 @@ params_lgb <- readRDS("params_lgb.rds")
 params_cat <- readRDS("params_cat.rds")
 ```
 
-# Training
+## Training
 
 ```{r}
 model_stack <- stackgbm(
@@ -95,7 +102,7 @@ model_stack <- stackgbm(
 )
 ```
 
-# Inference
+## Inference
 
 ```{r}
 roc_stack_tr <- roc(y_tr, predict(model_stack, x_tr)$prob, quiet = TRUE)
@@ -104,7 +111,7 @@ roc_stack_tr$auc
 roc_stack_te$auc
 ```
 
-# Performance benchmarking
+## Performance benchmarking
 
 Let's compare the predictive performance between the stacking model and
 the three types of tree boosting models (base learners) fitted individually:
@@ -202,7 +209,7 @@ plot(smooth(roc_cat_te), col = pal[4], add = TRUE)
 legend("bottomright", legend = c("stackgbm", "xgboost", "lightgbm", "catboost"), col = pal, lwd = 2)
 ```
 
-# Notes on categorical features
+## Notes on categorical features
 
 [xgboost](https://cran.r-project.org/web/packages/xgboost/vignettes/discoverYourData.html#conversion-from-categorical-to-numeric-variables)
 and [lightgbm](https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html#categorical-feature-support)
@@ -214,4 +221,4 @@ To avoid possible confusions, if your data has any categorical features,
 we recommend converting them to integers or use one-hot encoding, and
 use a numerical matrix as the input.
 
-# References
+## References

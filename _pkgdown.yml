@@ -1,3 +1,8 @@
+url: https://nanx.me/stackgbm/
+
+template:
+  bootstrap: 5
+
 reference:
   - title: "Training"
     contents:
