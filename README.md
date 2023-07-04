@@ -6,7 +6,7 @@ stackgbm offers a minimalist implementation of model stacking ([Wolpert, 1992](h
 
 ## Install
 
-First, install the R package catboost which is not yet available from CRAN as of December 2020. Follow its official [installation guide](https://catboost.ai/docs/concepts/r-installation.html).
+First, install the R package catboost which is not yet available from CRAN as of December 2020. Follow its official [installation guide](https://catboost.ai/en/docs/concepts/r-installation).
 
 Then install stackgbm from GitHub:
 
