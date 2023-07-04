@@ -174,7 +174,6 @@ individually:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/dmlc/xgboost" class="external-link">"xgboost"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/Microsoft/LightGBM" class="external-link">"lightgbm"</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://catboost.ai/" class="external-link">"catboost"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">model_xgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgb.train.html" class="external-link">xgb.train</a></span><span class="op">(</span></span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -200,8 +199,8 @@ individually:</p>
 <span>  verbose <span class="op">=</span> <span class="op">-</span><span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.train.html" class="external-link">catboost.train</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html" class="external-link">catboost.load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_train</span>, label <span class="op">=</span> <span class="va">y_train</span><span class="op">)</span>, <span class="cn">NULL</span>,</span>
+<span><span class="va">model_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/catboost_train.html">catboost_train</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/catboost_load_pool.html">catboost_load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_train</span>, label <span class="op">=</span> <span class="va">y_train</span><span class="op">)</span>, <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    loss_function <span class="op">=</span> <span class="st">"Logloss"</span>,</span>
 <span>    iterations <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">iterations</span>,</span>
@@ -227,8 +226,22 @@ individually:</p>
 <span><span class="co">#&gt; Area under the curve: 0.7586</span></span></code></pre></div>
 <p>catboost:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">roc_cat_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_train</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.predict.html" class="external-link">catboost.predict</a></span><span class="op">(</span><span class="va">model_cat</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html" class="external-link">catboost.load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_train</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">roc_cat_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_test</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.predict.html" class="external-link">catboost.predict</a></span><span class="op">(</span><span class="va">model_cat</span>, <span class="fu"><a href="https://rdrr.io/pkg/catboost/man/catboost.load_pool.html" class="external-link">catboost.load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_test</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">roc_cat_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span></span>
+<span>  <span class="va">y_train</span>,</span>
+<span>  <span class="fu"><a href="../reference/catboost_predict.html">catboost_predict</a></span><span class="op">(</span></span>
+<span>    <span class="va">model_cat</span>,</span>
+<span>    <span class="fu"><a href="../reference/catboost_load_pool.html">catboost_load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_train</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">roc_cat_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span></span>
+<span>  <span class="va">y_test</span>,</span>
+<span>  <span class="fu"><a href="../reference/catboost_predict.html">catboost_predict</a></span><span class="op">(</span></span>
+<span>    <span class="va">model_cat</span>,</span>
+<span>    <span class="fu"><a href="../reference/catboost_load_pool.html">catboost_load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_test</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">roc_cat_tr</span><span class="op">$</span><span class="va">auc</span></span>
 <span><span class="co">#&gt; Area under the curve: 0.9901</span></span>
 <span><span class="va">roc_cat_te</span><span class="op">$</span><span class="va">auc</span></span>
@@ -263,22 +276,25 @@ set</caption>
 </table>
 <p>Plot the ROC curves on the independent test set:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span></span>
-<span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nanx.me/ggsci/reference/pal_aaas.html" class="external-link">pal_aaas</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#e69f00"</span>, <span class="st">"#56b4e9"</span>, <span class="st">"#009e73"</span>, <span class="st">"#f0e442"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">smooth</span><span class="op">(</span><span class="va">roc_stack_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">smooth</span><span class="op">(</span><span class="va">roc_xgb_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">smooth</span><span class="op">(</span><span class="va">roc_lgb_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">smooth</span><span class="op">(</span><span class="va">roc_cat_te</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"bottomright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stackgbm"</span>, <span class="st">"xgboost"</span>, <span class="st">"lightgbm"</span>, <span class="st">"catboost"</span><span class="op">)</span>, col <span class="op">=</span> <span class="va">pal</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
+<span>  <span class="st">"bottomright"</span>,</span>
+<span>  col <span class="op">=</span> <span class="va">pal</span>, lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stackgbm"</span>, <span class="st">"xgboost"</span>, <span class="st">"lightgbm"</span>, <span class="st">"catboost"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="stackgbm_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="notes-on-categorical-features">Notes on categorical features<a class="anchor" aria-label="anchor" href="#notes-on-categorical-features"></a>
 </h2>
-<p><a href="https://cran.r-project.org/web/packages/xgboost/vignettes/discoverYourData.html#conversion-from-categorical-to-numeric-variables" class="external-link">xgboost</a>
+<p><a href="https://cran.r-project.org/package=xgboost/vignettes/discoverYourData.html#conversion-from-categorical-to-numeric-variables" class="external-link">xgboost</a>
 and <a href="https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html#categorical-feature-support" class="external-link">lightgbm</a>
-both prefer the categorical features to be encoded as integers. For <a href="https://catboost.ai/docs/concepts/algorithm-main-stages_cat-to-numberic.html" class="external-link">catboost</a>,
+both prefer the categorical features to be encoded as integers. For <a href="https://catboost.ai/en/docs/concepts/algorithm-main-stages_cat-to-numberic" class="external-link">catboost</a>,
 the categorical features can be encoded as character factors.</p>
 <p>To avoid possible confusions, if your data has any categorical
 features, we recommend converting them to integers or use one-hot

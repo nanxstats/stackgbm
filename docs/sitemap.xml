@@ -19,6 +19,15 @@
     <loc>https://nanx.me/stackgbm/news/index.html</loc>
   </url>
   <url>
+    <loc>https://nanx.me/stackgbm/reference/catboost_load_pool.html</loc>
+  </url>
+  <url>
+    <loc>https://nanx.me/stackgbm/reference/catboost_predict.html</loc>
+  </url>
+  <url>
+    <loc>https://nanx.me/stackgbm/reference/catboost_train.html</loc>
+  </url>
+  <url>
     <loc>https://nanx.me/stackgbm/reference/cv_catboost.html</loc>
   </url>
   <url>
