@@ -4,15 +4,16 @@
 
 stackgbm offers a minimalist implementation of model stacking ([Wolpert, 1992](https://doi.org/10.1016/S0893-6080(05)80023-1)) for gradient boosted tree models built by xgboost ([Chen and Guestrin, 2016](https://doi.org/10.1145/2939672.2939785)), lightgbm ([Ke et al., 2017](https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision)), and catboost ([Prokhorenkova et al., 2018](https://papers.nips.cc/paper/7898-catboost-unbiased-boosting-with-categorical-features)).
 
-## Install
+## Installation
 
-First, install the R package catboost which is not yet available from CRAN as of December 2020. Follow its official [installation guide](https://catboost.ai/en/docs/concepts/r-installation).
-
-Then install stackgbm from GitHub:
+Install from GitHub:
 
 ```r
 remotes::install_github("nanxstats/stackgbm")
 ```
+
+To install all dependencies, check out the instructions from
+[manage dependencies](https://github.com/nanxstats/stackgbm/wiki/Manage-dependencies).
 
 ## Design
 
