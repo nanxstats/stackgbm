@@ -90,11 +90,13 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
     fit <- lightgbm(
       data = xtrain,
       label = ytrain,
-      objective = "binary",
-      learning_rate = params$lgb.learning_rate,
-      num_iterations = params$lgb.num_iterations,
-      max_depth = params$lgb.max_depth,
-      num_leaves = 2^params$lgb.max_depth - 1,
+      params = list(
+        objective = "binary",
+        learning_rate = params$lgb.learning_rate,
+        num_iterations = params$lgb.num_iterations,
+        max_depth = params$lgb.max_depth,
+        num_leaves = 2^params$lgb.max_depth - 1
+      ),
       verbose = -1
     )
 

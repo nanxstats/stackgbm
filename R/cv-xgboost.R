@@ -20,11 +20,11 @@
 #' @examples
 #' # check the vignette for code examples
 cv_xgboost <- function(
-  x, y, nfolds = 5L, seed = 42, verbose = TRUE,
-  nrounds = c(10, 50, 100, 200, 500, 1000),
-  max_depth = c(2, 3, 4, 5),
-  learning_rate = c(0.001, 0.01, 0.02, 0.05, 0.1),
-  ncpus = parallel::detectCores()) {
+    x, y, nfolds = 5L, seed = 42, verbose = TRUE,
+    nrounds = c(10, 50, 100, 200, 500, 1000),
+    max_depth = c(2, 3, 4, 5),
+    learning_rate = c(0.001, 0.01, 0.02, 0.05, 0.1),
+    ncpus = parallel::detectCores()) {
   set.seed(seed)
   nrow_x <- nrow(x)
   index <- sample(rep_len(1L:nfolds, nrow_x))

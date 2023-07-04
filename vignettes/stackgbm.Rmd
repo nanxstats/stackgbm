@@ -1,7 +1,5 @@
 ---
-title: "Model Stacking for Boosted Trees"
-author: "Nan Xiao <<https://nanx.me>>"
-bibliography: stackgbm.bib
+title: "Model stacking for boosted trees"
 output:
   rmarkdown::html_document:
     toc: true
@@ -10,9 +8,10 @@ output:
     number_sections: false
     highlight: "textmate"
     css: "custom.css"
+bibliography: stackgbm.bib
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Model Stacking for Boosted Trees}
+  %\VignetteIndexEntry{Model stacking for boosted trees}
 ---
 
 ```{r, include=FALSE}
@@ -50,13 +49,13 @@ training set and the rest 200 will be in the (independent) test set.
 dat <- msaenet.sim.binomial(
   n = 1000, p = 50, rho = 0.6,
   coef = rnorm(25, 0, 10), snr = 1, p.train = 0.8,
-  seed = 1001
+  seed = 1010
 )
 
-x_tr <- dat$x.tr
-y_tr <- as.vector(dat$y.tr)
-x_te <- dat$x.te
-y_te <- as.vector(dat$y.te)
+x_train <- dat$x.tr
+x_test <- dat$x.te
+y_train <- as.vector(dat$y.tr)
+y_test <- as.vector(dat$y.te)
 ```
 
 ## Parameter tuning
@@ -67,15 +66,20 @@ with k-fold cross-validation. The "optimal" parameters will be
 used to fit the stacking model later.
 
 ```{r, eval=FALSE}
-params_xgb <- cv_xgboost(x_tr, y_tr)
-params_lgb <- cv_lightgbm(x_tr, y_tr)
-params_cat <- cv_catboost(x_tr, y_tr)
+params_xgb <- cv_xgboost(x_train, y_train)
+params_lgb <- cv_lightgbm(x_train, y_train)
+params_cat <- cv_catboost(x_train, y_train)
 ```
 
 ```{r, eval=FALSE, echo=FALSE}
-saveRDS(params_xgb, file = "params_xgb.rds")
-saveRDS(params_lgb, file = "params_lgb.rds")
-saveRDS(params_cat, file = "params_cat.rds")
+saveRDS(params_xgb, file = "vignettes/params_xgb.rds")
+saveRDS(params_lgb, file = "vignettes/params_lgb.rds")
+saveRDS(params_cat, file = "vignettes/params_cat.rds")
+
+temp_dir <- "catboost_info"
+temp_file <- "lightgbm.model"
+if (dir.exists(temp_dir)) unlink(temp_dir, recursive = TRUE)
+if (file.exists(temp_file)) unlink(temp_file)
 ```
 
 ```{r, echo=FALSE}
@@ -105,8 +109,8 @@ model_stack <- stackgbm(
 ## Inference
 
 ```{r}
-roc_stack_tr <- roc(y_tr, predict(model_stack, x_tr)$prob, quiet = TRUE)
-roc_stack_te <- roc(y_te, predict(model_stack, x_te)$prob, quiet = TRUE)
+roc_stack_tr <- roc(y_train, predict(model_stack, x_train)$prob, quiet = TRUE)
+roc_stack_te <- roc(y_test, predict(model_stack, x_test)$prob, quiet = TRUE)
 roc_stack_tr$auc
 roc_stack_te$auc
 ```
@@ -128,23 +132,25 @@ model_xgb <- xgb.train(
     max_depth = params_xgb$max_depth,
     eta = params_xgb$learning_rate
   ),
-  data = xgb.DMatrix(x_tr, label = y_tr),
+  data = xgb.DMatrix(x_train, label = y_train),
   nrounds = params_xgb$nrounds
 )
 
 model_lgb <- lightgbm(
-  data = x_tr,
-  label = y_tr,
-  objective = "binary",
-  learning_rate = params_lgb$learning_rate,
-  num_iterations = params_lgb$num_iterations,
-  max_depth = params_lgb$max_depth,
-  num_leaves = 2^params_lgb$max_depth - 1,
+  data = x_train,
+  label = y_train,
+  params = list(
+    objective = "binary",
+    learning_rate = params_lgb$learning_rate,
+    num_iterations = params_lgb$num_iterations,
+    max_depth = params_lgb$max_depth,
+    num_leaves = 2^params_lgb$max_depth - 1
+  ),
   verbose = -1
 )
 
 model_cat <- catboost.train(
-  catboost.load_pool(data = x_tr, label = y_tr), NULL,
+  catboost.load_pool(data = x_train, label = y_train), NULL,
   params = list(
     loss_function = "Logloss",
     iterations = params_cat$iterations,
@@ -157,8 +163,8 @@ model_cat <- catboost.train(
 xgboost:
 
 ```{r}
-roc_xgb_tr <- roc(y_tr, predict(model_xgb, x_tr), quiet = TRUE)
-roc_xgb_te <- roc(y_te, predict(model_xgb, x_te), quiet = TRUE)
+roc_xgb_tr <- roc(y_train, predict(model_xgb, x_train), quiet = TRUE)
+roc_xgb_te <- roc(y_test, predict(model_xgb, x_test), quiet = TRUE)
 roc_xgb_tr$auc
 roc_xgb_te$auc
 ```
@@ -166,8 +172,8 @@ roc_xgb_te$auc
 lightgbm:
 
 ```{r}
-roc_lgb_tr <- roc(y_tr, predict(model_lgb, x_tr), quiet = TRUE)
-roc_lgb_te <- roc(y_te, predict(model_lgb, x_te), quiet = TRUE)
+roc_lgb_tr <- roc(y_train, predict(model_lgb, x_train), quiet = TRUE)
+roc_lgb_te <- roc(y_test, predict(model_lgb, x_test), quiet = TRUE)
 roc_lgb_tr$auc
 roc_lgb_te$auc
 ```
@@ -175,8 +181,8 @@ roc_lgb_te$auc
 catboost:
 
 ```{r}
-roc_cat_tr <- roc(y_tr, catboost.predict(model_cat, catboost.load_pool(data = x_tr, label = NULL)), quiet = TRUE)
-roc_cat_te <- roc(y_te, catboost.predict(model_cat, catboost.load_pool(data = x_te, label = NULL)), quiet = TRUE)
+roc_cat_tr <- roc(y_train, catboost.predict(model_cat, catboost.load_pool(data = x_train, label = NULL)), quiet = TRUE)
+roc_cat_te <- roc(y_test, catboost.predict(model_cat, catboost.load_pool(data = x_test, label = NULL)), quiet = TRUE)
 roc_cat_tr$auc
 roc_cat_te$auc
 ```

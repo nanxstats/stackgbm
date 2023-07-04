@@ -17,10 +17,10 @@
 #' @examples
 #' # check the vignette for code examples
 cv_catboost <- function(
-  x, y, nfolds = 5L, seed = 42, verbose = TRUE,
-  iterations = c(10, 50, 100, 200, 500, 1000),
-  depth = c(2, 3, 4, 5),
-  ncpus = parallel::detectCores()) {
+    x, y, nfolds = 5L, seed = 42, verbose = TRUE,
+    iterations = c(10, 50, 100, 200, 500, 1000),
+    depth = c(2, 3, 4, 5),
+    ncpus = parallel::detectCores()) {
   set.seed(seed)
   nrow_x <- nrow(x)
   index <- sample(rep_len(1L:nfolds, nrow_x))
