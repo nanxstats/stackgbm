@@ -17,7 +17,6 @@
 #'
 #' @importFrom xgboost xgb.train xgb.DMatrix
 #' @importFrom lightgbm lightgbm
-#' @importFrom catboost catboost.train catboost.load_pool catboost.predict
 #' @importFrom stats glm binomial
 #' @importFrom progress progress_bar
 #'
@@ -119,9 +118,9 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
     xtest <- x_cat[index_cat == i, , drop = FALSE]
     ytest <- y[index_cat == i]
 
-    train_pool <- catboost.load_pool(data = xtrain, label = ytrain)
-    test_pool <- catboost.load_pool(data = xtest, label = NULL)
-    fit <- catboost.train(
+    train_pool <- catboost_load_pool(data = xtrain, label = ytrain)
+    test_pool <- catboost_load_pool(data = xtest, label = NULL)
+    fit <- catboost_train(
       train_pool, NULL,
       params = list(
         loss_function = "Logloss",
@@ -131,7 +130,7 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
       )
     )
     model_cat[[i]] <- fit
-    x_glm[index_cat == i, "cat"] <- catboost.predict(fit, test_pool, prediction_type = "Probability")
+    x_glm[index_cat == i, "cat"] <- catboost_predict(fit, pool = test_pool, prediction_type = "Probability")
   }
 
   # logistic regression

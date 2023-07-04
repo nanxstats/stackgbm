@@ -15,3 +15,8 @@ reference:
       - cv_xgboost
       - cv_lightgbm
       - cv_catboost
+  - title: "Wrapper functions"
+    contents:
+      - catboost_load_pool
+      - catboost_train
+      - catboost_predict

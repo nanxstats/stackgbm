@@ -19,6 +19,9 @@ knitr::opts_chunk$set(
   comment = "#>",
   collapse = TRUE
 )
+
+run <- if (rlang::is_installed("catboost")) TRUE else FALSE
+knitr::opts_chunk$set(eval = run)
 ```
 
 ## Introduction
@@ -123,7 +126,6 @@ the three types of tree boosting models (base learners) fitted individually:
 ```{r, message=FALSE}
 library("xgboost")
 library("lightgbm")
-library("catboost")
 
 model_xgb <- xgb.train(
   params = list(
@@ -149,8 +151,8 @@ model_lgb <- lightgbm(
   verbose = -1
 )
 
-model_cat <- catboost.train(
-  catboost.load_pool(data = x_train, label = y_train), NULL,
+model_cat <- catboost_train(
+  catboost_load_pool(data = x_train, label = y_train), NULL,
   params = list(
     loss_function = "Logloss",
     iterations = params_cat$iterations,
@@ -181,8 +183,22 @@ roc_lgb_te$auc
 catboost:
 
 ```{r}
-roc_cat_tr <- roc(y_train, catboost.predict(model_cat, catboost.load_pool(data = x_train, label = NULL)), quiet = TRUE)
-roc_cat_te <- roc(y_test, catboost.predict(model_cat, catboost.load_pool(data = x_test, label = NULL)), quiet = TRUE)
+roc_cat_tr <- roc(
+  y_train,
+  catboost_predict(
+    model_cat,
+    catboost_load_pool(data = x_train, label = NULL)
+  ),
+  quiet = TRUE
+)
+roc_cat_te <- roc(
+  y_test,
+  catboost_predict(
+    model_cat,
+    catboost_load_pool(data = x_test, label = NULL)
+  ),
+  quiet = TRUE
+)
 roc_cat_tr$auc
 roc_cat_te$auc
 ```
@@ -205,22 +221,24 @@ knitr::kable(df, digits = 4, caption = "AUC values from four models on training 
 Plot the ROC curves on the independent test set:
 
 ```{r, message=FALSE, fig.asp = 1}
-library("ggsci")
-pal <- pal_aaas()(4)
+pal <- c("#e69f00", "#56b4e9", "#009e73", "#f0e442")
 
 plot(smooth(roc_stack_te), col = pal[1])
 plot(smooth(roc_xgb_te), col = pal[2], add = TRUE)
 plot(smooth(roc_lgb_te), col = pal[3], add = TRUE)
 plot(smooth(roc_cat_te), col = pal[4], add = TRUE)
-legend("bottomright", legend = c("stackgbm", "xgboost", "lightgbm", "catboost"), col = pal, lwd = 2)
+legend(
+  "bottomright",
+  col = pal, lwd = 2,
+  legend = c("stackgbm", "xgboost", "lightgbm", "catboost")
+)
 ```
 
 ## Notes on categorical features
 
-[xgboost](https://cran.r-project.org/web/packages/xgboost/vignettes/discoverYourData.html#conversion-from-categorical-to-numeric-variables)
-and [lightgbm](https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html#categorical-feature-support)
+[xgboost](https://cran.r-project.org/package=xgboost/vignettes/discoverYourData.html#conversion-from-categorical-to-numeric-variables) and [lightgbm](https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html#categorical-feature-support)
 both prefer the categorical features to be encoded as integers.
-For [catboost](https://catboost.ai/docs/concepts/algorithm-main-stages_cat-to-numberic.html),
+For [catboost](https://catboost.ai/en/docs/concepts/algorithm-main-stages_cat-to-numberic),
 the categorical features can be encoded as character factors.
 
 To avoid possible confusions, if your data has any categorical features,

@@ -48,10 +48,11 @@ cv_catboost <- function(
       xtest <- x[index == i, , drop = FALSE]
       ytest <- y[index == i]
 
-      train_pool <- catboost.load_pool(data = xtrain, label = ytrain)
-      test_pool <- catboost.load_pool(data = xtest, label = NULL)
-      fit <- catboost.train(
-        train_pool, NULL,
+      train_pool <- catboost_load_pool(data = xtrain, label = ytrain)
+      test_pool <- catboost_load_pool(data = xtest, label = NULL)
+      fit <- catboost_train(
+        train_pool,
+        test_pool = NULL,
         params = list(
           loss_function = "Logloss",
           iterations = df_grid[j, "iterations"],
@@ -60,7 +61,7 @@ cv_catboost <- function(
           thread_count = ncpus
         )
       )
-      ypredvec <- catboost.predict(fit, test_pool, prediction_type = "Probability")
+      ypredvec <- catboost_predict(fit, pool = test_pool, prediction_type = "Probability")
       ypred[index == i, 1L] <- ytest
       ypred[index == i, 2L] <- ypredvec
     }

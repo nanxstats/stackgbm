@@ -11,19 +11,17 @@ Description: A minimalist implementation of model stacking
 License: GPL-3
 URL: https://nanx.me/stackgbm/, https://github.com/nanxstats/stackgbm
 Encoding: UTF-8
-LazyData: true
 VignetteBuilder: knitr
 BugReports: https://github.com/nanxstats/stackgbm/issues
 Depends: R (>= 3.5.0)
 Imports:
-    xgboost,
     lightgbm,
-    catboost,
-    progress
+    pROC,
+    progress,
+    rlang,
+    xgboost
 Suggests:
     knitr,
-    rmarkdown,
     msaenet,
-    ggsci,
-    pROC
+    rmarkdown
 RoxygenNote: 7.2.3

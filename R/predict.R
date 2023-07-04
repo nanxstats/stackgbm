@@ -13,7 +13,6 @@
 #' @method predict stackgbm
 #'
 #' @importFrom xgboost xgb.DMatrix
-#' @importFrom catboost catboost.load_pool catboost.predict
 #' @importFrom stats predict
 #'
 #' @export
@@ -36,8 +35,8 @@ predict.stackgbm <- function(object, newx, threshold = 0.5, classes = c(1L, 0L),
   for (i in 1L:nfolds) pred_lgb[, i] <- predict(object$model_lgb[[i]], newx_lgb)
 
   newx_cat <- newx
-  newx_cat <- catboost.load_pool(data = newx_cat, label = NULL)
-  for (i in 1L:nfolds) pred_cat[, i] <- catboost.predict(object$model_cat[[i]], newx_cat, prediction_type = "Probability")
+  newx_cat <- catboost_load_pool(data = newx_cat, label = NULL)
+  for (i in 1L:nfolds) pred_cat[, i] <- catboost_predict(object$model_cat[[i]], pool = newx_cat, prediction_type = "Probability")
 
   newx_glm <- data.frame(
     "xgb" = rowMeans(pred_xgb),
