@@ -6,7 +6,7 @@
 \alias{_PACKAGE}
 \title{stackgbm: Stacked Gradient Boosting Machines}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
 A minimalist implementation of model stacking for boosted tree models built by 'xgboost', 'lightgbm', and 'catboost'.
 }
