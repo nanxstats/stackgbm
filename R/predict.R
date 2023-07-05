@@ -12,7 +12,6 @@
 #'
 #' @method predict stackgbm
 #'
-#' @importFrom xgboost xgb.DMatrix
 #' @importFrom stats predict
 #'
 #' @export
@@ -28,7 +27,7 @@ predict.stackgbm <- function(object, newx, threshold = 0.5, classes = c(1L, 0L),
   pred_cat <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
 
   newx_xgb <- as.matrix(newx)
-  newx_xgb <- xgb.DMatrix(newx_xgb)
+  newx_xgb <- xgboost_dmatrix(newx_xgb)
   for (i in 1L:nfolds) pred_xgb[, i] <- predict(object$model_xgb[[i]], newx_xgb)
 
   newx_lgb <- as.matrix(newx)

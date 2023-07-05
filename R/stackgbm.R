@@ -15,7 +15,6 @@
 #'
 #' @return Fitted boosted tree models and stacked tree model.
 #'
-#' @importFrom xgboost xgb.train xgb.DMatrix
 #' @importFrom lightgbm lightgbm
 #' @importFrom stats glm binomial
 #' @importFrom progress progress_bar
@@ -53,10 +52,10 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
     xtest <- x_xgb[index_xgb == i, , drop = FALSE]
     ytest <- y[index_xgb == i]
 
-    xtrain <- xgb.DMatrix(xtrain, label = ytrain)
-    xtest <- xgb.DMatrix(xtest)
+    xtrain <- xgboost_dmatrix(xtrain, label = ytrain)
+    xtest <- xgboost_dmatrix(xtest)
 
-    fit <- xgb.train(
+    fit <- xgboost_train(
       params = list(
         objective = "binary:logistic",
         eval_metric = "auc",

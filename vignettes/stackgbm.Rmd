@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
   collapse = TRUE
 )
 
-run <- if (rlang::is_installed("catboost")) TRUE else FALSE
+run <- if (rlang::is_installed(c("catboost", "xgboost"))) TRUE else FALSE
 knitr::opts_chunk$set(eval = run)
 ```
 
@@ -124,17 +124,16 @@ Let's compare the predictive performance between the stacking model and
 the three types of tree boosting models (base learners) fitted individually:
 
 ```{r, message=FALSE}
-library("xgboost")
 library("lightgbm")
 
-model_xgb <- xgb.train(
+model_xgb <- xgboost_train(
   params = list(
     objective = "binary:logistic",
     eval_metric = "auc",
     max_depth = params_xgb$max_depth,
     eta = params_xgb$learning_rate
   ),
-  data = xgb.DMatrix(x_train, label = y_train),
+  data = xgboost_dmatrix(x_train, label = y_train),
   nrounds = params_xgb$nrounds
 )
 

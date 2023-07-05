@@ -18,10 +18,10 @@ Imports:
     lightgbm,
     pROC,
     progress,
-    rlang,
-    xgboost
+    rlang
 Suggests:
     knitr,
     msaenet,
-    rmarkdown
+    rmarkdown,
+    xgboost
 RoxygenNote: 7.2.3
