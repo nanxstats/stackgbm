@@ -140,7 +140,7 @@ the stacking model later.</p>
 <h2 id="training">Training<a class="anchor" aria-label="anchor" href="#training"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model_stack</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stackgbm.html">stackgbm</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">model_stack</span> <span class="op">&lt;-</span> <span class="fu">stackgbm</span><span class="op">(</span></span>
 <span>  <span class="va">dat</span><span class="op">$</span><span class="va">x.tr</span>, <span class="va">dat</span><span class="op">$</span><span class="va">y.tr</span>,</span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    xgb.nrounds <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">nrounds</span>,</span>
