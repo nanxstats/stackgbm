@@ -48,4 +48,10 @@
   <url>
     <loc>https://nanx.me/stackgbm/reference/stackgbm.html</loc>
   </url>
+  <url>
+    <loc>https://nanx.me/stackgbm/reference/xgboost_dmatrix.html</loc>
+  </url>
+  <url>
+    <loc>https://nanx.me/stackgbm/reference/xgboost_train.html</loc>
+  </url>
 </urlset>
