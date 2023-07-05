@@ -2,8 +2,8 @@
 % Please edit documentation in R/stackgbm-package.R
 \docType{package}
 \name{stackgbm-package}
-\alias{stackgbm}
 \alias{stackgbm-package}
+\alias{_PACKAGE}
 \title{stackgbm: Stacked Gradient Boosting Machines}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
