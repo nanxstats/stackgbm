@@ -15,7 +15,6 @@
 #'
 #' @return Fitted boosted tree models and stacked tree model.
 #'
-#' @importFrom lightgbm lightgbm
 #' @importFrom stats glm binomial
 #' @importFrom progress progress_bar
 #'
@@ -85,7 +84,7 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
     xtest <- x_lgb[index_lgb == i, , drop = FALSE]
     ytest <- y[index_lgb == i]
 
-    fit <- lightgbm(
+    fit <- lightgbm_train(
       data = xtrain,
       label = ytrain,
       params = list(

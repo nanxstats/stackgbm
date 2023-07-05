@@ -51,7 +51,7 @@ cv_lightgbm <- function(
       xtest <- x[index == i, , drop = FALSE]
       ytest <- y[index == i]
 
-      fit <- lightgbm(
+      fit <- lightgbm_train(
         data = xtrain,
         label = ytrain,
         params = list(

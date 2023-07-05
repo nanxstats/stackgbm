@@ -15,12 +15,12 @@ VignetteBuilder: knitr
 BugReports: https://github.com/nanxstats/stackgbm/issues
 Depends: R (>= 3.5.0)
 Imports:
-    lightgbm,
     pROC,
     progress,
     rlang
 Suggests:
     knitr,
+    lightgbm,
     msaenet,
     rmarkdown,
     xgboost

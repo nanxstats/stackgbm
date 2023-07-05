@@ -20,5 +20,6 @@ reference:
       - catboost_load_pool
       - catboost_train
       - catboost_predict
+      - lightgbm_train
       - xgboost_dmatrix
       - xgboost_train
