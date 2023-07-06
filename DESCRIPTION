@@ -8,7 +8,7 @@ Authors@R: c(
 Maintainer: Nan Xiao <me@nanx.me>
 Description: A minimalist implementation of model stacking
     for boosted tree models built by 'xgboost', 'lightgbm', and 'catboost'.
-License: GPL-3
+License: MIT + file LICENSE
 URL: https://nanx.me/stackgbm/, https://github.com/nanxstats/stackgbm
 Encoding: UTF-8
 VignetteBuilder: knitr
