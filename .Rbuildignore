@@ -9,3 +9,4 @@ lightgbm.model
 catboost_info/
 vignettes/lightgbm.model
 vignettes/catboost_info/
+^LICENSE\.md$
