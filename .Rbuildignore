@@ -10,3 +10,4 @@ catboost_info/
 vignettes/lightgbm.model
 vignettes/catboost_info/
 ^LICENSE\.md$
+^CODE_OF_CONDUCT\.md$

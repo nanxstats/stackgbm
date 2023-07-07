@@ -20,3 +20,9 @@ To install all dependencies, check out the instructions from
 stackgbm implements a classic two-layer stacking model: the first layer generates "features" produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is derived from our [2nd place solution](https://github.com/nanxstats/bcpm-msaenet) for a precisionFDA brain cancer machine learning challenge in 2020.
 
 To make sure the package is easy to understand, modify, and extend, we choose to build this package with base R without any special frameworks or dialects. We also only exposed the most essential tunable parameters for the boosted tree models (learning rate, maximum depth of a tree, and number of iterations).
+
+## Code of Conduct
+
+Please note that the stackgbm project is released with a
+[Contributor Code of Conduct](https://nanx.me/stackgbm/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
