@@ -52,7 +52,7 @@ training set and the rest 200 will be in the (independent) test set.
 dat <- msaenet.sim.binomial(
   n = 1000, p = 50, rho = 0.6,
   coef = rnorm(25, 0, 10), snr = 1, p.train = 0.8,
-  seed = 1010
+  seed = 42
 )
 
 x_train <- dat$x.tr
