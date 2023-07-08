@@ -31,35 +31,25 @@ precisionFDA brain cancer machine learning challenge in 2020.
 
 ## Design principles
 
-stackgbm is designed to offer a minimalist, research-friendly code base
-for GBDT model stacking.
+Provide a minimalist, research-friendly code base for GBDT model stacking.
 
-### Targeted models
-
-We only focus on the three most impactful GBDT model
-implementations: XGBoost, LightGBM, and CatBoost.
-This focus ensures high performance without unnecessary complexity.
-
-### Grid search and cross-validation
-
-We embrace traditional grid search and cross-validation for parameter tuning,
-to offer robust and understandable parameter tuning.
-
-### Key parameter tuning
-
-We provide tuning options for the most impactful parameters
-(learning rate, maximum depth of a tree, and number of iterations) across
-GBDT implementations to avoid the risk of overfitting and complexity
-associated with excessive parameter tuning.
-
-### Effective defaults
-
-The default parameter grid balances performance and computational cost,
-performing effectively across a wide range of scenarios.
-
-### Base R implementation
-
-Built with base R to ensure it is easy to understand, modify, and extend.
+- **Targeted models**\
+  Focus on the three most impactful GBDT model
+  implementations: XGBoost, LightGBM, and CatBoost,
+  to ensure high performance without unnecessary complexity.
+- **Grid search and cross-validation**\
+  Embrace traditional grid search and cross-validation for parameter tuning,
+  to make it robust and understandable.
+- **Key parameter tuning**\
+  Provide tuning options for the most impactful parameters
+  (learning rate, maximum depth of a tree, and number of iterations) across
+  GBDT implementations to avoid the risk of overfitting and complexity
+  associated with excessive parameter tuning.
+- **Effective defaults**\
+  The default parameter grid balances performance and computational cost,
+  performing effectively across a wide range of scenarios.
+- **Base R implementation**\
+  Build with base R to ensure it is easy to understand, modify, and extend.
 
 ## Code of Conduct
 
