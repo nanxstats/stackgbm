@@ -88,10 +88,31 @@
 <p>To install all dependencies, check out the instructions from <a href="https://github.com/nanxstats/stackgbm/wiki/Manage-dependencies" class="external-link">manage dependencies</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="design">Design<a class="anchor" aria-label="anchor" href="#design"></a>
+<h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>stackgbm implements a classic two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is derived from our <a href="https://github.com/nanxstats/bcpm-msaenet" class="external-link">2nd place solution</a> for a precisionFDA brain cancer machine learning challenge in 2020.</p>
-<p>To make sure the package is easy to understand, modify, and extend, we choose to build this package with base R without any special frameworks or dialects. We also only exposed the most essential tunable parameters for the boosted tree models (learning rate, maximum depth of a tree, and number of iterations).</p>
+<p>stackgbm implements a classic two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is rewritten from our <a href="https://github.com/nanxstats/bcpm-msaenet" class="external-link">2nd place solution</a> for a precisionFDA brain cancer machine learning challenge in 2020.</p>
+</div>
+<div class="section level2">
+<h2 id="design-principles">Design principles<a class="anchor" aria-label="anchor" href="#design-principles"></a>
+</h2>
+<p>Provide a minimalist, research-friendly code base for GBDT model stacking.</p>
+<ul>
+<li>
+<strong>Targeted models</strong><br>
+Focus on the three most impactful GBDT model implementations: XGBoost, LightGBM, and CatBoost, to ensure high performance without unnecessary complexity.</li>
+<li>
+<strong>Grid search and cross-validation</strong><br>
+Embrace traditional grid search and cross-validation for parameter tuning, to make it robust and understandable.</li>
+<li>
+<strong>Key parameter tuning</strong><br>
+Provide tuning options for the most impactful parameters (learning rate, maximum depth of a tree, and number of iterations) across GBDT implementations to avoid the risk of overfitting and complexity associated with excessive parameter tuning.</li>
+<li>
+<strong>Effective defaults</strong><br>
+The default parameter grid balances performance and computational cost, performing effectively across a wide range of scenarios.</li>
+<li>
+<strong>Base R implementation</strong><br>
+Build with base R to ensure it is easy to understand, modify, and extend.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
