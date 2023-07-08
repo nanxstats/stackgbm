@@ -15,11 +15,37 @@ remotes::install_github("nanxstats/stackgbm")
 To install all dependencies, check out the instructions from
 [manage dependencies](https://github.com/nanxstats/stackgbm/wiki/Manage-dependencies).
 
-## Design
+## Model
 
-stackgbm implements a classic two-layer stacking model: the first layer generates "features" produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is derived from our [2nd place solution](https://github.com/nanxstats/bcpm-msaenet) for a precisionFDA brain cancer machine learning challenge in 2020.
+stackgbm implements a classic two-layer stacking model: the first layer
+generates "features" produced by gradient boosting trees.
+The second layer is a logistic regression that uses these features as inputs.
+The code is rewritten from our
+[2nd place solution](https://github.com/nanxstats/bcpm-msaenet) for a
+precisionFDA brain cancer machine learning challenge in 2020.
 
-To make sure the package is easy to understand, modify, and extend, we choose to build this package with base R without any special frameworks or dialects. We also only exposed the most essential tunable parameters for the boosted tree models (learning rate, maximum depth of a tree, and number of iterations).
+## Design principles
+
+stackgbm is designed to offer a minimalist, research-friendly code base
+for GBDT model stacking.
+
+1. **Targeted models**:
+   We only focus on the three most impactful GBDT model
+   implementations: XGBoost, LightGBM, and CatBoost.
+   This focus ensures high performance without unnecessary complexity.
+2. **Grid search and cross-validation**:
+   We embrace traditional grid search and cross-validation for parameter tuning,
+   to offer robust and understandable parameter tuning.
+3. **Key parameter tuning**:
+   We provide tuning options for the most impactful parameters
+   (learning rate, maximum depth of a tree, and number of iterations) across
+   GBDT implementations to avoid the risk of overfitting and complexity
+   associated with excessive parameter tuning.
+4. **Effective defaults**:
+   The default parameter grid balances performance and computational cost,
+   performing effectively across a wide range of scenarios.
+5. **Base R implementation**:
+   Built with base R to ensure it is easy to understand, modify, and extend.
 
 ## Code of Conduct
 
