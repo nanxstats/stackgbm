@@ -51,6 +51,13 @@ Provide a minimalist, research-friendly code base for GBDT model stacking.
 - **Base R implementation**\
   Build with base R to ensure it is easy to understand, modify, and extend.
 
+## Related projects
+
+For a more comprehensive and flexible implementation of model stacking, see
+[stacks](https://stacks.tidymodels.org) in tidymodels
+and [StackingClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html)
+in scikit-learn.
+
 ## Code of Conduct
 
 Please note that the stackgbm project is released with a
