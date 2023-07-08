@@ -10,9 +10,9 @@ cv_xgboost(
   nfolds = 5L,
   seed = 42,
   verbose = TRUE,
-  nrounds = c(10, 50, 100, 200, 500, 1000),
-  max_depth = c(2, 3, 4, 5),
-  learning_rate = c(0.001, 0.01, 0.02, 0.05, 0.1),
+  nrounds = c(100, 200, 500, 1000),
+  max_depth = c(3, 5, 7, 9),
+  learning_rate = c(0.01, 0.05, 0.1, 0.2),
   ncpus = parallel::detectCores()
 )
 }
