@@ -1,0 +1,43 @@
+---
+title: "Design principles"
+output:
+  rmarkdown::html_document:
+    toc: false
+    number_sections: false
+    highlight: "textmate"
+    css: "custom.css"
+bibliography: stackgbm.bib
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Design principles}
+---
+
+stackgbm aims to provide a minimalist, research-friendly code base
+for GBDT model stacking.
+
+## Targeted model types
+
+Focus on the three most impactful GBDT model implementations:
+XGBoost, LightGBM, and CatBoost, to ensure high performance
+without unnecessary complexity.
+
+## Robust model selection
+
+Embrace the traditional grid search and cross-validation approach for
+parameter tuning, to make model selection robust and understandable.
+
+## Key parameter tuning
+
+Provide tuning options for the most impactful parameters
+(learning rate, maximum depth of a tree, and number of iterations) across
+GBDT implementations to avoid the risk of overfitting and complexity
+associated with excessive parameter tuning.
+
+## Effective defaults
+
+The default parameter grid balances performance and computational cost,
+performing effectively across a wide range of scenarios.
+
+## Base R implementation
+
+Build with base R to ensure it is easy to understand, modify, and extend.
