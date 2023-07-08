@@ -59,10 +59,10 @@ cv_lightgbm <- function(
           learning_rate = df_grid[j, "learning_rate"],
           num_iterations = df_grid[j, "num_iterations"],
           max_depth = df_grid[j, "max_depth"],
-          num_leaves = 2^(df_grid[j, "max_depth"]) - 1
+          num_leaves = 2^(df_grid[j, "max_depth"]) - 1,
+          num_threads = ncpus
         ),
-        verbose = -1,
-        num_threads = ncpus
+        verbose = -1
       )
       ypredvec <- predict(fit, xtest)
       ypred[index == i, 1L] <- ytest
