@@ -16,7 +16,8 @@ for the GBDT model. This is equivalent to `nrounds` in XGBoost,
 `num_iterations` in LightGBM, and `iterations` in CatBoost.}
 
 \item{max_depth}{A numeric vector of the maximum tree depths.
-This parameter is the same across all the considered GBDT models.}
+This parameter is equivalent to `max_depth` in XGBoost and LightGBM,
+and `depth` in CatBoost.}
 
 \item{learning_rate}{A numeric vector of learning rates for the GBDT model.
 This parameter is equivalent to `eta` in XGBoost,
