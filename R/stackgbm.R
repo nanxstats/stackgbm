@@ -7,8 +7,7 @@
 #' @param x Predictor matrix
 #' @param y Response vector
 #' @param params A list of optimal parameters for boosted tree models.
-#' Can be derived from \code{\link{cv_xgboost}}, \code{\link{cv_lightgbm}},
-#' and \code{\link{cv_catboost}}.
+#'   Can be derived from [cv_xgboost()], [cv_lightgbm()], and [cv_catboost()].
 #' @param nfolds Number of folds. Default is 5.
 #' @param seed Random seed for reproducibility
 #' @param verbose Show progress?
@@ -59,7 +58,7 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
         objective = "binary:logistic",
         eval_metric = "auc",
         max_depth = params$xgb.max_depth,
-        eta = params$xgb.learning_rate
+        eta = params$xgb.eta
       ),
       data = xtrain,
       nrounds = params$xgb.nrounds
