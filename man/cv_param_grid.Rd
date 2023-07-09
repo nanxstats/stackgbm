@@ -2,7 +2,7 @@
 % Please edit documentation in R/cv_param_grid.R
 \name{cv_param_grid}
 \alias{cv_param_grid}
-\title{Generate a parameter grid for cross-validation of GBDT models}
+\title{Generate a parameter grid for cross-validation}
 \usage{
 cv_param_grid(
   n_iterations = c(100, 200, 500, 1000),
@@ -29,10 +29,6 @@ A list where the names are the parameter names and the values
 \description{
 This function generates a parameter grid to be used in the
 cross-validation of gradient boosting decision tree (GBDT) models.
-The parameters include the number of iterations, maximum tree depth,
-and learning rate, which are common to various GBDT models such as
-XGBoost, LightGBM, and CatBoost. Additionally, users can specify
-model-specific parameters.
 }
 \examples{
 params <- cv_param_grid(

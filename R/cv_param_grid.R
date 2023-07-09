@@ -1,11 +1,7 @@
-#' Generate a parameter grid for cross-validation of GBDT models
+#' Generate a parameter grid for cross-validation
 #'
 #' This function generates a parameter grid to be used in the
 #' cross-validation of gradient boosting decision tree (GBDT) models.
-#' The parameters include the number of iterations, maximum tree depth,
-#' and learning rate, which are common to various GBDT models such as
-#' XGBoost, LightGBM, and CatBoost. Additionally, users can specify
-#' model-specific parameters.
 #'
 #' @param n_iterations A numeric vector of the number of iterations (trees)
 #'   for the GBDT model. This is equivalent to `nrounds` in XGBoost,
