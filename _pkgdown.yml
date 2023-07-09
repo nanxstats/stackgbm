@@ -12,6 +12,7 @@ reference:
       - predict.stackgbm
   - title: "Parameter tuning"
     contents:
+      - cv_param_grid
       - cv_xgboost
       - cv_lightgbm
       - cv_catboost
