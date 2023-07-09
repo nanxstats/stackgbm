@@ -12,8 +12,8 @@ vignette: >
   %\VignetteIndexEntry{Design principles}
 ---
 
-stackgbm aims to delivering a minimalist, research-oriented tool for
-GBDT model stacking.
+stackgbm aims to deliver a minimalist, research-oriented tool for
+model stacking, with a focus on performant GBDT model implementations.
 
 Anticipating that users may eventually need to tailor the code base to
 their unique requirements, the design emphasizes simplicity and moderate
