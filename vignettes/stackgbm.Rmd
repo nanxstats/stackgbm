@@ -98,7 +98,7 @@ model_stack <- stackgbm(
   dat$x.tr, dat$y.tr,
   params = list(
     xgb.nrounds = params_xgb$nrounds,
-    xgb.learning_rate = params_xgb$learning_rate,
+    xgb.eta = params_xgb$eta,
     xgb.max_depth = params_xgb$max_depth,
     lgb.num_iterations = params_lgb$num_iterations,
     lgb.max_depth = params_lgb$max_depth,
@@ -129,7 +129,7 @@ model_xgb <- xgboost_train(
     objective = "binary:logistic",
     eval_metric = "auc",
     max_depth = params_xgb$max_depth,
-    eta = params_xgb$learning_rate
+    eta = params_xgb$eta
   ),
   data = xgboost_dmatrix(x_train, label = y_train),
   nrounds = params_xgb$nrounds
