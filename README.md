@@ -1,6 +1,9 @@
 # stackgbm <img src="man/figures/logo.png" align="right" width="120" />
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/nanxstats/stackgbm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nanxstats/stackgbm/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
 
 stackgbm offers a minimalist implementation of model stacking
 ([Wolpert, 1992](https://doi.org/10.1016/S0893-6080(05)80023-1))
