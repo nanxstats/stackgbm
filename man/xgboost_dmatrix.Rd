@@ -14,7 +14,7 @@ xgboost_dmatrix(data, label = NULL, ...)
 \item{...}{Additional parameters.}
 }
 \value{
-An `xgb.DMatrix` object.
+An \code{xgb.DMatrix} object.
 }
 \description{
 Create xgb.DMatrix object

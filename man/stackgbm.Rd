@@ -12,7 +12,7 @@ stackgbm(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE)
 \item{y}{Response vector}
 
 \item{params}{A list of optimal parameters for boosted tree models.
-Can be derived from [cv_xgboost()], [cv_lightgbm()], and [cv_catboost()].}
+Can be derived from \code{\link[=cv_xgboost]{cv_xgboost()}}, \code{\link[=cv_lightgbm]{cv_lightgbm()}}, and \code{\link[=cv_catboost]{cv_catboost()}}.}
 
 \item{nfolds}{Number of folds. Default is 5.}
 

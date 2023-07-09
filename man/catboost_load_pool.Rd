@@ -14,7 +14,7 @@ catboost_load_pool(data, label = NULL, ...)
 \item{...}{Additional parameters.}
 }
 \value{
-A `catboost.Pool` object.
+A \code{catboost.Pool} object.
 }
 \description{
 Create a dataset

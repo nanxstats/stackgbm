@@ -12,20 +12,20 @@ cv_param_grid(
 }
 \arguments{
 \item{n_iterations}{A numeric vector of the number of iterations (trees)
-for the GBDT model. This is equivalent to `nrounds` in XGBoost,
-`num_iterations` in LightGBM, and `iterations` in CatBoost.}
+for the GBDT model. This is equivalent to \code{nrounds} in XGBoost,
+\code{num_iterations} in LightGBM, and \code{iterations} in CatBoost.}
 
 \item{max_depth}{A numeric vector of the maximum tree depths.
-This parameter is equivalent to `max_depth` in XGBoost and LightGBM,
-and `depth` in CatBoost.}
+This parameter is equivalent to \code{max_depth} in XGBoost and LightGBM,
+and \code{depth} in CatBoost.}
 
 \item{learning_rate}{A numeric vector of learning rates for the GBDT model.
-This parameter is equivalent to `eta` in XGBoost,
-`learning_rate` in LightGBM, and ignored in CatBoost.}
+This parameter is equivalent to \code{eta} in XGBoost,
+\code{learning_rate} in LightGBM, and ignored in CatBoost.}
 }
 \value{
 A list where the names are the parameter names and the values
-  are vectors of possible values for those parameters.
+are vectors of possible values for those parameters.
 }
 \description{
 This function generates a parameter grid to be used in the
