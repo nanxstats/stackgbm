@@ -20,22 +20,22 @@
 #' # check the vignette for code examples
 predict.stackgbm <- function(object, newx, threshold = 0.5, classes = c(1L, 0L), ...) {
   nrow_newx <- nrow(newx)
-  nfolds <- length(object$model_xgb)
+  n_folds <- length(object$model_xgb)
 
-  pred_xgb <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
-  pred_lgb <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
-  pred_cat <- matrix(NA, nrow = nrow_newx, ncol = nfolds)
+  pred_xgb <- matrix(NA, nrow = nrow_newx, ncol = n_folds)
+  pred_lgb <- matrix(NA, nrow = nrow_newx, ncol = n_folds)
+  pred_cat <- matrix(NA, nrow = nrow_newx, ncol = n_folds)
 
   newx_xgb <- as.matrix(newx)
   newx_xgb <- xgboost_dmatrix(newx_xgb)
-  for (i in 1L:nfolds) pred_xgb[, i] <- predict(object$model_xgb[[i]], newx_xgb)
+  for (i in 1L:n_folds) pred_xgb[, i] <- predict(object$model_xgb[[i]], newx_xgb)
 
   newx_lgb <- as.matrix(newx)
-  for (i in 1L:nfolds) pred_lgb[, i] <- predict(object$model_lgb[[i]], newx_lgb)
+  for (i in 1L:n_folds) pred_lgb[, i] <- predict(object$model_lgb[[i]], newx_lgb)
 
   newx_cat <- newx
   newx_cat <- catboost_load_pool(data = newx_cat, label = NULL)
-  for (i in 1L:nfolds) pred_cat[, i] <- catboost_predict(object$model_cat[[i]], pool = newx_cat, prediction_type = "Probability")
+  for (i in 1L:n_folds) pred_cat[, i] <- catboost_predict(object$model_cat[[i]], pool = newx_cat, prediction_type = "Probability")
 
   newx_glm <- data.frame(
     "xgb" = rowMeans(pred_xgb),

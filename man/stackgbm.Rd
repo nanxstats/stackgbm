@@ -4,19 +4,19 @@
 \alias{stackgbm}
 \title{Model stacking for boosted trees}
 \usage{
-stackgbm(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE)
+stackgbm(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE)
 }
 \arguments{
-\item{x}{Predictor matrix}
+\item{x}{Predictor matrix.}
 
-\item{y}{Response vector}
+\item{y}{Response vector.}
 
 \item{params}{A list of optimal parameters for boosted tree models.
 Can be derived from \code{\link[=cv_xgboost]{cv_xgboost()}}, \code{\link[=cv_lightgbm]{cv_lightgbm()}}, and \code{\link[=cv_catboost]{cv_catboost()}}.}
 
-\item{nfolds}{Number of folds. Default is 5.}
+\item{n_folds}{Number of folds. Default is 5.}
 
-\item{seed}{Random seed for reproducibility}
+\item{seed}{Random seed for reproducibility.}
 
 \item{verbose}{Show progress?}
 }
