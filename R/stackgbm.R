@@ -4,12 +4,12 @@
 #' tree models fitted by xgboost, lightgbm, and catboost; second layer being
 #' a logistic regression model.
 #'
-#' @param x Predictor matrix
-#' @param y Response vector
+#' @param x Predictor matrix.
+#' @param y Response vector.
 #' @param params A list of optimal parameters for boosted tree models.
 #'   Can be derived from [cv_xgboost()], [cv_lightgbm()], and [cv_catboost()].
-#' @param nfolds Number of folds. Default is 5.
-#' @param seed Random seed for reproducibility
+#' @param n_folds Number of folds. Default is 5.
+#' @param seed Random seed for reproducibility.
 #' @param verbose Show progress?
 #'
 #' @return Fitted boosted tree models and stacked tree model.
@@ -21,16 +21,16 @@
 #'
 #' @examples
 #' # check the vignette for code examples
-stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
+stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
   set.seed(seed)
   nrow_x <- nrow(x)
-  index_xgb <- sample(rep_len(1L:nfolds, nrow_x))
-  index_lgb <- sample(rep_len(1L:nfolds, nrow_x))
-  index_cat <- sample(rep_len(1L:nfolds, nrow_x))
+  index_xgb <- sample(rep_len(1L:n_folds, nrow_x))
+  index_lgb <- sample(rep_len(1L:n_folds, nrow_x))
+  index_cat <- sample(rep_len(1L:n_folds, nrow_x))
 
-  model_xgb <- vector("list", nfolds)
-  model_lgb <- vector("list", nfolds)
-  model_cat <- vector("list", nfolds)
+  model_xgb <- vector("list", n_folds)
+  model_lgb <- vector("list", n_folds)
+  model_cat <- vector("list", n_folds)
 
   x_glm <- matrix(NA, nrow = nrow_x, ncol = 3L)
   colnames(x_glm) <- c("xgb", "lgb", "cat")
@@ -38,12 +38,12 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
   # xgboost
   pb <- progress_bar$new(
     format = "  fitting xgboost model [:bar] :percent in :elapsed",
-    total = nfolds, clear = FALSE, width = 60
+    total = n_folds, clear = FALSE, width = 60
   )
 
   x_xgb <- as.matrix(x)
 
-  for (i in 1L:nfolds) {
+  for (i in 1L:n_folds) {
     if (verbose) pb$tick()
     xtrain <- x_xgb[index_xgb != i, , drop = FALSE]
     ytrain <- y[index_xgb != i]
@@ -71,12 +71,12 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
   # lightgbm
   pb <- progress_bar$new(
     format = "  fitting lightgbm model [:bar] :percent in :elapsed",
-    total = nfolds, clear = FALSE, width = 60
+    total = n_folds, clear = FALSE, width = 60
   )
 
   x_lgb <- as.matrix(x)
 
-  for (i in 1L:nfolds) {
+  for (i in 1L:n_folds) {
     if (verbose) pb$tick()
     xtrain <- x_lgb[index_lgb != i, , drop = FALSE]
     ytrain <- y[index_lgb != i]
@@ -103,12 +103,12 @@ stackgbm <- function(x, y, params, nfolds = 5L, seed = 42, verbose = TRUE) {
   # catboost
   pb <- progress_bar$new(
     format = "  fitting catboost model [:bar] :percent in :elapsed",
-    total = nfolds, clear = FALSE, width = 60
+    total = n_folds, clear = FALSE, width = 60
   )
 
   x_cat <- x
 
-  for (i in 1L:nfolds) {
+  for (i in 1L:n_folds) {
     if (verbose) pb$tick()
     xtrain <- x_cat[index_cat != i, , drop = FALSE]
     ytrain <- y[index_cat != i]
