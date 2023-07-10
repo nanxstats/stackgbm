@@ -35,6 +35,20 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
+      - name: Install remotes
+        run: install.packages("remotes")
+        shell: Rscript {0}
+
+      - name: Install catboost
+        run: |
+          remotes::install_url(
+            "https://github.com/catboost/catboost/releases/download/v1.2/catboost-R-Linux-1.2.tgz",
+            INSTALL_opts = c(
+              "--no-multiarch", "--no-test-load", "--no-staged-install"
+            )
+          )
+        shell: Rscript {0}
+
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
