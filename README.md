@@ -5,7 +5,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-stackgbm offers a minimalist implementation of model stacking
+stackgbm offers a minimalist, research-oriented implementation of model stacking
 ([Wolpert, 1992](https://doi.org/10.1016/S0893-6080(05)80023-1))
 for gradient boosted tree models built by
 xgboost ([Chen and Guestrin, 2016](https://doi.org/10.1145/2939672.2939785)),
@@ -28,9 +28,6 @@ To install all dependencies, check out the instructions from
 stackgbm implements a classic two-layer stacking model: the first layer
 generates "features" produced by gradient boosting trees.
 The second layer is a logistic regression that uses these features as inputs.
-The code is rewritten from our
-[2nd place solution](https://github.com/nanxstats/bcpm-msaenet) for a
-precisionFDA brain cancer machine learning challenge in 2020.
 
 ## Related projects
 
