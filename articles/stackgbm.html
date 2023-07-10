@@ -167,7 +167,9 @@ the stacking model later.</p>
 <code class="sourceCode R"><span><span class="va">roc_stack_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_train</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_stack</span>, <span class="va">x_train</span><span class="op">)</span><span class="op">$</span><span class="va">prob</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roc_stack_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_test</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_stack</span>, <span class="va">x_test</span><span class="op">)</span><span class="op">$</span><span class="va">prob</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roc_stack_tr</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="va">roc_stack_te</span><span class="op">$</span><span class="va">auc</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.9865</span></span>
+<span><span class="va">roc_stack_te</span><span class="op">$</span><span class="va">auc</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.7569</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="performance-benchmarking">Performance benchmarking<a class="anchor" aria-label="anchor" href="#performance-benchmarking"></a>
@@ -214,13 +216,17 @@ individually:</p>
 <code class="sourceCode R"><span><span class="va">roc_xgb_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_train</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_xgb</span>, <span class="va">x_train</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roc_xgb_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_test</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_xgb</span>, <span class="va">x_test</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roc_xgb_tr</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="va">roc_xgb_te</span><span class="op">$</span><span class="va">auc</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.9923</span></span>
+<span><span class="va">roc_xgb_te</span><span class="op">$</span><span class="va">auc</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.7499</span></span></code></pre></div>
 <p>lightgbm:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roc_lgb_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_train</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_lgb</span>, <span class="va">x_train</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roc_lgb_te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span><span class="va">y_test</span>, <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_lgb</span>, <span class="va">x_test</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roc_lgb_tr</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="va">roc_lgb_te</span><span class="op">$</span><span class="va">auc</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.9898</span></span>
+<span><span class="va">roc_lgb_te</span><span class="op">$</span><span class="va">auc</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.745</span></span></code></pre></div>
 <p>catboost:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">roc_cat_tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/roc.html" class="external-link">roc</a></span><span class="op">(</span></span>
@@ -240,8 +246,37 @@ individually:</p>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">roc_cat_tr</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="va">roc_cat_te</span><span class="op">$</span><span class="va">auc</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.9304</span></span>
+<span><span class="va">roc_cat_te</span><span class="op">$</span><span class="va">auc</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.7431</span></span></code></pre></div>
 <p>Summarize the AUC values in a table:</p>
+<table class="table">
+<caption>AUC values from four models on training and testing
+set</caption>
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">stackgbm</th>
+<th align="right">xgboost</th>
+<th align="right">lightgbm</th>
+<th align="right">catboost</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Training</td>
+<td align="right">0.9865</td>
+<td align="right">0.9923</td>
+<td align="right">0.9898</td>
+<td align="right">0.9304</td>
+</tr>
+<tr class="even">
+<td align="left">Testing</td>
+<td align="right">0.7569</td>
+<td align="right">0.7499</td>
+<td align="right">0.7450</td>
+<td align="right">0.7431</td>
+</tr>
+</tbody>
+</table>
 <p>Plot the ROC curves on the independent test set:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#e69f00"</span>, <span class="st">"#56b4e9"</span>, <span class="st">"#009e73"</span>, <span class="st">"#f0e442"</span><span class="op">)</span></span>
@@ -255,6 +290,7 @@ individually:</p>
 <span>  col <span class="op">=</span> <span class="va">pal</span>, lwd <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stackgbm"</span>, <span class="st">"xgboost"</span>, <span class="st">"lightgbm"</span>, <span class="st">"catboost"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p><img src="stackgbm_files/figure-html/roc-curves-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="notes-on-categorical-features">Notes on categorical features<a class="anchor" aria-label="anchor" href="#notes-on-categorical-features"></a>
