@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 
+docs/
 lightgbm.model
 catboost_info/
 vignettes/lightgbm.model
