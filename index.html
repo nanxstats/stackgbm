@@ -85,7 +85,7 @@
 </div>
 <!-- badges: start -->
 
-<p>stackgbm offers a minimalist implementation of model stacking (<a href="https://doi.org/10.1016/S0893-6080(05)80023-1" class="external-link">Wolpert, 1992</a>) for gradient boosted tree models built by xgboost (<a href="https://doi.org/10.1145/2939672.2939785" class="external-link">Chen and Guestrin, 2016</a>), lightgbm (<a href="https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision" class="external-link">Ke et al., 2017</a>), and catboost (<a href="https://papers.nips.cc/paper/7898-catboost-unbiased-boosting-with-categorical-features" class="external-link">Prokhorenkova et al., 2018</a>).</p>
+<p>stackgbm offers a minimalist, research-oriented implementation of model stacking (<a href="https://doi.org/10.1016/S0893-6080(05)80023-1" class="external-link">Wolpert, 1992</a>) for gradient boosted tree models built by xgboost (<a href="https://doi.org/10.1145/2939672.2939785" class="external-link">Chen and Guestrin, 2016</a>), lightgbm (<a href="https://papers.nips.cc/paper/6907-lightgbm-a-highly-efficient-gradient-boosting-decision" class="external-link">Ke et al., 2017</a>), and catboost (<a href="https://papers.nips.cc/paper/7898-catboost-unbiased-boosting-with-categorical-features" class="external-link">Prokhorenkova et al., 2018</a>).</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -97,7 +97,7 @@
 <div class="section level2">
 <h2 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
 </h2>
-<p>stackgbm implements a classic two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs. The code is rewritten from our <a href="https://github.com/nanxstats/bcpm-msaenet" class="external-link">2nd place solution</a> for a precisionFDA brain cancer machine learning challenge in 2020.</p>
+<p>stackgbm implements a classic two-layer stacking model: the first layer generates “features” produced by gradient boosting trees. The second layer is a logistic regression that uses these features as inputs.</p>
 </div>
 <div class="section level2">
 <h2 id="related-projects">Related projects<a class="anchor" aria-label="anchor" href="#related-projects"></a>
