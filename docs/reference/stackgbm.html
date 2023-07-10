@@ -66,17 +66,17 @@ a logistic regression model.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">stackgbm</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">params</span>, nfolds <span class="op">=</span> <span class="fl">5L</span>, seed <span class="op">=</span> <span class="fl">42</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">stackgbm</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">params</span>, n_folds <span class="op">=</span> <span class="fl">5L</span>, seed <span class="op">=</span> <span class="fl">42</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>Predictor matrix</p></dd>
+<dd><p>Predictor matrix.</p></dd>
 
 
 <dt>y</dt>
-<dd><p>Response vector</p></dd>
+<dd><p>Response vector.</p></dd>
 
 
 <dt>params</dt>
@@ -84,12 +84,12 @@ a logistic regression model.</p>
 Can be derived from <code><a href="cv_xgboost.html">cv_xgboost()</a></code>, <code><a href="cv_lightgbm.html">cv_lightgbm()</a></code>, and <code><a href="cv_catboost.html">cv_catboost()</a></code>.</p></dd>
 
 
-<dt>nfolds</dt>
+<dt>n_folds</dt>
 <dd><p>Number of folds. Default is 5.</p></dd>
 
 
 <dt>seed</dt>
-<dd><p>Random seed for reproducibility</p></dd>
+<dd><p>Random seed for reproducibility.</p></dd>
 
 
 <dt>verbose</dt>
