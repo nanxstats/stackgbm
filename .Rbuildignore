@@ -8,6 +8,7 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^docs$
+^inst/logo/logo\.R$
 
 ^lightgbm\.model$
 ^catboost_info$
