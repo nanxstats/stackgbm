@@ -49,16 +49,20 @@ training set and the rest 200 will be in the (independent) test set.
 25 out of the 50 features will be informative and follows $N(0, 10)$.
 
 ```{r}
-dat <- msaenet.sim.binomial(
-  n = 1000, p = 50, rho = 0.6,
-  coef = rnorm(25, 0, 10), snr = 1, p.train = 0.8,
+sim_data <- msaenet.sim.binomial(
+  n = 1000,
+  p = 50,
+  rho = 0.6,
+  coef = rnorm(25, mean = 0, sd = 10),
+  snr = 1,
+  p.train = 0.8,
   seed = 42
 )
 
-x_train <- dat$x.tr
-x_test <- dat$x.te
-y_train <- as.vector(dat$y.tr)
-y_test <- as.vector(dat$y.te)
+x_train <- sim_data$x.tr
+x_test <- sim_data$x.te
+y_train <- as.vector(sim_data$y.tr)
+y_test <- as.vector(sim_data$y.te)
 ```
 
 ## Parameter tuning
@@ -95,7 +99,7 @@ params_cat <- readRDS("params_cat.rds")
 
 ```{r}
 model_stack <- stackgbm(
-  dat$x.tr, dat$y.tr,
+  sim_data$x.tr, sim_data$y.tr,
   params = list(
     xgb.nrounds = params_xgb$nrounds,
     xgb.eta = params_xgb$eta,

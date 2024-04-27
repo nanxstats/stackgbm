@@ -42,6 +42,32 @@ and grid search
 }
 \examples{
 \dontshow{if (is_installed_lightgbm()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Check the vignette for code examples
+sim_data <- msaenet::msaenet.sim.binomial(
+  n = 100,
+  p = 10,
+  rho = 0.6,
+  coef = rnorm(5, mean = 0, sd = 10),
+  snr = 1,
+  p.train = 0.8,
+  seed = 42
+)
+
+params <- suppressWarnings(
+  cv_lightgbm(
+    sim_data$x.tr,
+    sim_data$y.tr,
+    params = cv_param_grid(
+      n_iterations = c(100, 200),
+      max_depth = c(3, 5),
+      learning_rate = c(0.1, 0.5)
+    ),
+    n_folds = 5,
+    n_threads = 1,
+    seed = 42,
+    verbose = FALSE
+  )
+)
+
+params$df
 \dontshow{\}) # examplesIf}
 }
