@@ -18,8 +18,8 @@
 #'
 #' @export
 #'
-#' @examples
-#' # check the vignette for code examples
+#' @examplesIf is_installed_xgboost()
+#' # Check the vignette for code examples
 cv_xgboost <- function(
     x, y,
     params = cv_param_grid(),

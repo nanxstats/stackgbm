@@ -8,7 +8,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_xgboost()
 #' # Example code
 xgboost_dmatrix <- function(data, label = NULL, ...) {
   rlang::check_installed("xgboost", reason = "to create a dataset")
@@ -31,7 +31,7 @@ xgboost_dmatrix <- function(data, label = NULL, ...) {
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_xgboost()
 #' # Example code
 xgboost_train <- function(params, data, nrounds, ...) {
   rlang::check_installed("xgboost", reason = "to train the model")

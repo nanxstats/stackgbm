@@ -20,5 +20,7 @@ An \code{xgb.DMatrix} object.
 Create xgb.DMatrix object
 }
 \examples{
+\dontshow{if (is_installed_xgboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example code
+\dontshow{\}) # examplesIf}
 }

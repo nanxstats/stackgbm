@@ -20,5 +20,7 @@ A \code{catboost.Pool} object.
 Create a dataset
 }
 \examples{
+\dontshow{if (is_installed_catboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example code
+\dontshow{\}) # examplesIf}
 }

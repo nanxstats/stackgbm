@@ -8,7 +8,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_catboost()
 #' # Example code
 catboost_load_pool <- function(data, label = NULL, ...) {
   rlang::check_installed("catboost", reason = "to create a dataset")
@@ -32,7 +32,7 @@ catboost_load_pool <- function(data, label = NULL, ...) {
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_catboost()
 #' # Example code
 catboost_train <- function(learn_pool, test_pool = NULL, params = list()) {
   rlang::check_installed("catboost", reason = "to train the model")
@@ -57,7 +57,7 @@ catboost_train <- function(learn_pool, test_pool = NULL, params = list()) {
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_catboost()
 #' # Example code
 catboost_predict <- function(model, pool, prediction_type = "Probability", ...) {
   rlang::check_installed("catboost", reason = "to predict based on the model")

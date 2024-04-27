@@ -24,3 +24,8 @@ reference:
       - lightgbm_train
       - xgboost_dmatrix
       - xgboost_train
+  - title: "Utility functions"
+    contents:
+      - is_installed_xgboost
+      - is_installed_lightgbm
+      - is_installed_catboost

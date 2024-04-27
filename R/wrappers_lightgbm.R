@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_lightgbm()
 #' # Example code
 lightgbm_train <- function(data, label, params, ...) {
   rlang::check_installed("lightgbm", reason = "to train the model")

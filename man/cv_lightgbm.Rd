@@ -41,5 +41,7 @@ lightgbm - parameter tuning and model selection with k-fold cross-validation
 and grid search
 }
 \examples{
-# check the vignette for code examples
+\dontshow{if (is_installed_lightgbm()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Check the vignette for code examples
+\dontshow{\}) # examplesIf}
 }

@@ -22,5 +22,7 @@ A model object.
 Train xgboost model
 }
 \examples{
+\dontshow{if (is_installed_xgboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example code
+\dontshow{\}) # examplesIf}
 }

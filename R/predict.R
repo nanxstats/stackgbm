@@ -16,8 +16,8 @@
 #'
 #' @export
 #'
-#' @examples
-#' # check the vignette for code examples
+#' @examplesIf is_installed_xgboost() && is_installed_lightgbm() && is_installed_catboost()
+#' # Check the vignette for code examples
 predict.stackgbm <- function(object, newx, threshold = 0.5, classes = c(1L, 0L), ...) {
   nrow_newx <- nrow(newx)
   n_folds <- length(object$model_xgb)

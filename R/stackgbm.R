@@ -19,8 +19,8 @@
 #'
 #' @export stackgbm
 #'
-#' @examples
-#' # check the vignette for code examples
+#' @examplesIf is_installed_xgboost() && is_installed_lightgbm() && is_installed_catboost()
+#' # Check the vignette for code examples
 stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
   set.seed(seed)
   nrow_x <- nrow(x)

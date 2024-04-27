@@ -41,5 +41,7 @@ catboost - parameter tuning and model selection with k-fold cross-validation
 and grid search
 }
 \examples{
+\dontshow{if (is_installed_catboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # check the vignette for code examples
+\dontshow{\}) # examplesIf}
 }

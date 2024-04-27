@@ -16,8 +16,8 @@
 #'
 #' @export
 #'
-#' @examples
-#' # check the vignette for code examples
+#' @examplesIf is_installed_lightgbm()
+#' # Check the vignette for code examples
 cv_lightgbm <- function(
     x, y,
     params = cv_param_grid(),

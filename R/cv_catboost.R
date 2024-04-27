@@ -16,7 +16,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf is_installed_catboost()
 #' # check the vignette for code examples
 cv_catboost <- function(
     x, y,

@@ -29,5 +29,7 @@ tree models fitted by xgboost, lightgbm, and catboost; second layer being
 a logistic regression model.
 }
 \examples{
-# check the vignette for code examples
+\dontshow{if (is_installed_xgboost() && is_installed_lightgbm() && is_installed_catboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Check the vignette for code examples
+\dontshow{\}) # examplesIf}
 }
