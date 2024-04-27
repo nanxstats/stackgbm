@@ -84,8 +84,45 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example code</span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu">msaenet</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html" class="external-link">msaenet.sim.binomial</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  p <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  rho <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  snr <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  p.train <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="xgboost_dmatrix.html">xgboost_dmatrix</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>, label <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">xgboost_train</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    objective <span class="op">=</span> <span class="st">"binary:logistic"</span>,</span></span>
+<span class="r-in"><span>    eval_metric <span class="op">=</span> <span class="st">"auc"</span>,</span></span>
+<span class="r-in"><span>    max_depth <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>    eta <span class="op">=</span> <span class="fl">0.1</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">x_train</span>,</span></span>
+<span class="r-in"><span>  nrounds <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  nthread <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ##### xgb.Booster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> raw: 100.1 Kb </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   xgboost::xgb.train(params = list(objective = "binary:logistic", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     eval_metric = "auc", max_depth = 3, eta = 0.1), data = &lt;pointer: 0x55a5b5d38ae0&gt;, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     nrounds = 100, nthread = 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> params (as set within xgb.train):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   objective = "binary:logistic", eval_metric = "auc", max_depth = "3", eta = "0.1", nthread = "1", validate_parameters = "TRUE"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> xgb.attributes:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   niter</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> callbacks:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   cb.print.evaluation(period = print_every_n)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> niter: 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nfeatures : 10 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
