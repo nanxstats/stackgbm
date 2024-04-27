@@ -55,6 +55,15 @@
     <loc>https://nanx.me/stackgbm/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://nanx.me/stackgbm/reference/is_installed_catboost.html</loc>
+  </url>
+  <url>
+    <loc>https://nanx.me/stackgbm/reference/is_installed_lightgbm.html</loc>
+  </url>
+  <url>
+    <loc>https://nanx.me/stackgbm/reference/is_installed_xgboost.html</loc>
+  </url>
+  <url>
     <loc>https://nanx.me/stackgbm/reference/lightgbm_train.html</loc>
   </url>
   <url>
