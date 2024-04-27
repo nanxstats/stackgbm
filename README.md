@@ -32,7 +32,8 @@ The second layer is a logistic regression that uses these features as inputs.
 ## Related projects
 
 For a more comprehensive and flexible implementation of model stacking, see
-[stacks](https://stacks.tidymodels.org) in tidymodels
+[stacks](https://stacks.tidymodels.org) in tidymodels,
+[mlr3pipelines](https://mlr-org.com/gallery/pipelines/2020-04-27-tuning-stacking/) in mlr3,
 and [StackingClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html)
 in scikit-learn.
 
