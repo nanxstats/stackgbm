@@ -23,6 +23,32 @@ Train lightgbm model
 }
 \examples{
 \dontshow{if (is_installed_lightgbm()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Example code
+sim_data <- msaenet::msaenet.sim.binomial(
+  n = 100,
+  p = 10,
+  rho = 0.6,
+  coef = rnorm(5, mean = 0, sd = 10),
+  snr = 1,
+  p.train = 0.8,
+  seed = 42
+)
+
+fit <- suppressWarnings(
+  lightgbm_train(
+    data = sim_data$x.tr,
+    label = sim_data$y.tr,
+    params = list(
+      objective = "binary",
+      learning_rate = 0.1,
+      num_iterations = 100,
+      max_depth = 3,
+      num_leaves = 2^3 - 1,
+      num_threads = 1
+    ),
+    verbose = -1
+  )
+)
+
+fit
 \dontshow{\}) # examplesIf}
 }

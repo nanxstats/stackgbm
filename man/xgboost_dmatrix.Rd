@@ -21,6 +21,19 @@ Create xgb.DMatrix object
 }
 \examples{
 \dontshow{if (is_installed_xgboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Example code
+sim_data <- msaenet::msaenet.sim.binomial(
+  n = 100,
+  p = 10,
+  rho = 0.6,
+  coef = rnorm(5, mean = 0, sd = 10),
+  snr = 1,
+  p.train = 0.8,
+  seed = 42
+)
+
+x_train <- xgboost_dmatrix(sim_data$x.tr, label = sim_data$y.tr)
+x_train
+x_test <- xgboost_dmatrix(sim_data$x.te)
+x_test
 \dontshow{\}) # examplesIf}
 }

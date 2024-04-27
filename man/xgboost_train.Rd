@@ -23,6 +23,30 @@ Train xgboost model
 }
 \examples{
 \dontshow{if (is_installed_xgboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Example code
+sim_data <- msaenet::msaenet.sim.binomial(
+  n = 100,
+  p = 10,
+  rho = 0.6,
+  coef = rnorm(5, mean = 0, sd = 10),
+  snr = 1,
+  p.train = 0.8,
+  seed = 42
+)
+
+x_train <- xgboost_dmatrix(sim_data$x.tr, label = sim_data$y.tr)
+
+fit <- xgboost_train(
+  params = list(
+    objective = "binary:logistic",
+    eval_metric = "auc",
+    max_depth = 3,
+    eta = 0.1
+  ),
+  data = x_train,
+  nrounds = 100,
+  nthread = 1
+)
+
+fit
 \dontshow{\}) # examplesIf}
 }

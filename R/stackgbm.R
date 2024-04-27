@@ -35,7 +35,7 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
   x_glm <- matrix(NA, nrow = nrow_x, ncol = 3L)
   colnames(x_glm) <- c("xgb", "lgb", "cat")
 
-  # xgboost
+  # xgboost ----
   pb <- progress_bar$new(
     format = "  fitting xgboost model [:bar] :percent in :elapsed",
     total = n_folds, clear = FALSE, width = 60
@@ -68,7 +68,7 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
     x_glm[index_xgb == i, "xgb"] <- predict(fit, xtest)
   }
 
-  # lightgbm
+  # lightgbm ----
   pb <- progress_bar$new(
     format = "  fitting lightgbm model [:bar] :percent in :elapsed",
     total = n_folds, clear = FALSE, width = 60
@@ -100,7 +100,7 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
     x_glm[index_lgb == i, "lgb"] <- predict(fit, xtest)
   }
 
-  # catboost
+  # catboost ----
   pb <- progress_bar$new(
     format = "  fitting catboost model [:bar] :percent in :elapsed",
     total = n_folds, clear = FALSE, width = 60
@@ -130,17 +130,18 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
     x_glm[index_cat == i, "cat"] <- catboost_predict(fit, pool = test_pool, prediction_type = "Probability")
   }
 
-  # logistic regression
+  # Logistic regression ----
   df <- as.data.frame(cbind(y, x_glm))
   names(df)[1] <- "y"
   model_glm <- glm(y ~ ., data = df, family = binomial())
 
-  lst <- list(
-    "model_xgb" = model_xgb,
-    "model_lgb" = model_lgb,
-    "model_cat" = model_cat,
-    "model_glm" = model_glm
+  structure(
+    list(
+      "model_xgb" = model_xgb,
+      "model_lgb" = model_lgb,
+      "model_cat" = model_cat,
+      "model_glm" = model_glm
+    ),
+    class = "stackgbm"
   )
-  class(lst) <- "stackgbm"
-  lst
 }
