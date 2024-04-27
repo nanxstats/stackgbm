@@ -42,7 +42,7 @@ jobs:
       - name: Install catboost
         run: |
           remotes::install_url(
-            "https://github.com/catboost/catboost/releases/download/v1.2/catboost-R-Linux-1.2.tgz",
+            "https://github.com/catboost/catboost/releases/download/v1.2.5/catboost-R-Linux-1.2.5.tgz",
             INSTALL_opts = c(
               "--no-multiarch", "--no-test-load", "--no-staged-install"
             )
