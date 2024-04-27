@@ -112,16 +112,20 @@ binary outcome vector. 800 samples will be in the training set and the
 rest 200 will be in the (independent) test set. 25 out of the 50
 features will be informative and follows <span class="math inline">\(N(0, 10)\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html" class="external-link">msaenet.sim.binomial</a></span><span class="op">(</span></span>
-<span>  n <span class="op">=</span> <span class="fl">1000</span>, p <span class="op">=</span> <span class="fl">50</span>, rho <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, snr <span class="op">=</span> <span class="fl">1</span>, p.train <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<code class="sourceCode R"><span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html" class="external-link">msaenet.sim.binomial</a></span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  p <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  rho <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">25</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  snr <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  p.train <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">x_train</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">x.tr</span></span>
-<span><span class="va">x_test</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">x.te</span></span>
-<span><span class="va">y_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span></span>
-<span><span class="va">y_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">y.te</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">x_train</span> <span class="op">&lt;-</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span></span>
+<span><span class="va">x_test</span> <span class="op">&lt;-</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">x.te</span></span>
+<span><span class="va">y_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span></span>
+<span><span class="va">y_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">y.te</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="parameter-tuning">Parameter tuning<a class="anchor" aria-label="anchor" href="#parameter-tuning"></a>
@@ -141,7 +145,7 @@ the stacking model later.</p>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_stack</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/stackgbm.html">stackgbm</a></span><span class="op">(</span></span>
-<span>  <span class="va">dat</span><span class="op">$</span><span class="va">x.tr</span>, <span class="va">dat</span><span class="op">$</span><span class="va">y.tr</span>,</span>
+<span>  <span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span>,</span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    xgb.nrounds <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">nrounds</span>,</span>
 <span>    xgb.eta <span class="op">=</span> <span class="va">params_xgb</span><span class="op">$</span><span class="va">eta</span>,</span>
