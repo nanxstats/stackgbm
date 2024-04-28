@@ -31,25 +31,25 @@ combines the strength of multiple base learners to drive up predictive performan
 It is a particularly popular and effective strategy used in machine learning competitions.
 
 stackgbm implements a two-layer stacking model: the first layer generates
-"features" produced by gradient boosting trees. The boosted tree models are built by
+"features" produced by gradient boosting trees. The boosted tree models are
+built by
 xgboost [@chen2016xgboost], lightgbm [@ke2017lightgbm], and catboost [@prokhorenkova2018catboost].
 The second layer is a logistic regression that uses these features as inputs.
 
 ```{r, message=FALSE}
 library("stackgbm")
-library("msaenet")
-library("pROC")
 ```
 
 ## Generate data
 
-Let's generate some data for the demo. The simulated data has a $1000 \times 50$
-predictor matrix with a binary outcome vector. 800 samples will be in the
-training set and the rest 200 will be in the (independent) test set.
+Let's generate some data for demonstrate purposes.
+The simulated data has a $1000 \times 50$ predictor matrix with a
+binary outcome vector. 800 samples will be in the training set and
+the rest 200 will be in the (independent) test set.
 25 out of the 50 features will be informative and follows $N(0, 10)$.
 
 ```{r}
-sim_data <- msaenet.sim.binomial(
+sim_data <- msaenet::msaenet.sim.binomial(
   n = 1000,
   p = 50,
   rho = 0.6,
@@ -73,15 +73,15 @@ with k-fold cross-validation. The "optimal" parameters will be
 used to fit the stacking model later.
 
 ```{r, eval=FALSE}
-params_xgb <- cv_xgboost(x_train, y_train)
-params_lgb <- cv_lightgbm(x_train, y_train)
-params_cat <- cv_catboost(x_train, y_train)
+params_xgboost <- cv_xgboost(x_train, y_train)
+params_lightgbm <- cv_lightgbm(x_train, y_train)
+params_catboost <- cv_catboost(x_train, y_train)
 ```
 
 ```{r, eval=FALSE, echo=FALSE}
-saveRDS(params_xgb, file = "vignettes/params_xgb.rds")
-saveRDS(params_lgb, file = "vignettes/params_lgb.rds")
-saveRDS(params_cat, file = "vignettes/params_cat.rds")
+saveRDS(params_xgboost, file = "vignettes/params_xgboost.rds")
+saveRDS(params_lightgbm, file = "vignettes/params_lightgbm.rds")
+saveRDS(params_catboost, file = "vignettes/params_catboost.rds")
 
 temp_dir <- "catboost_info"
 temp_file <- "lightgbm.model"
@@ -90,25 +90,21 @@ if (file.exists(temp_file)) unlink(temp_file)
 ```
 
 ```{r, echo=FALSE}
-params_xgb <- readRDS("params_xgb.rds")
-params_lgb <- readRDS("params_lgb.rds")
-params_cat <- readRDS("params_cat.rds")
+params_xgboost <- readRDS("params_xgboost.rds")
+params_lightgbm <- readRDS("params_lightgbm.rds")
+params_catboost <- readRDS("params_catboost.rds")
 ```
 
-## Training
+## Train the stackgbm model
 
 ```{r}
-model_stack <- stackgbm(
-  sim_data$x.tr, sim_data$y.tr,
+model_stackgbm <- stackgbm(
+  sim_data$x.tr,
+  sim_data$y.tr,
   params = list(
-    xgb.nrounds = params_xgb$nrounds,
-    xgb.eta = params_xgb$eta,
-    xgb.max_depth = params_xgb$max_depth,
-    lgb.num_iterations = params_lgb$num_iterations,
-    lgb.max_depth = params_lgb$max_depth,
-    lgb.learning_rate = params_lgb$learning_rate,
-    cat.iterations = params_cat$iterations,
-    cat.depth = params_cat$depth
+    params_xgboost,
+    params_lightgbm,
+    params_catboost
   )
 )
 ```
@@ -116,110 +112,143 @@ model_stack <- stackgbm(
 ## Inference
 
 ```{r}
-roc_stack_tr <- roc(y_train, predict(model_stack, x_train)$prob, quiet = TRUE)
-roc_stack_te <- roc(y_test, predict(model_stack, x_test)$prob, quiet = TRUE)
-roc_stack_tr$auc
-roc_stack_te$auc
+roc_stackgbm_train <- pROC::roc(
+  y_train,
+  predict(model_stackgbm, x_train)$prob,
+  quiet = TRUE
+)
+roc_stackgbm_test <- pROC::roc(
+  y_test,
+  predict(model_stackgbm, x_test)$prob,
+  quiet = TRUE
+)
+roc_stackgbm_train$auc
+roc_stackgbm_test$auc
 ```
 
-## Performance benchmarking
+## Performance evaluation
 
 Let's compare the predictive performance between the stacking model and
-the three types of tree boosting models (base learners) fitted individually:
+the three types of tree boosting models (base learners) fitted individually.
 
 ```{r, message=FALSE}
-model_xgb <- xgboost_train(
+model_xgboost <- xgboost_train(
   params = list(
     objective = "binary:logistic",
     eval_metric = "auc",
-    max_depth = params_xgb$max_depth,
-    eta = params_xgb$eta
+    max_depth = params_xgboost$max_depth,
+    eta = params_xgboost$eta
   ),
   data = xgboost_dmatrix(x_train, label = y_train),
-  nrounds = params_xgb$nrounds
+  nrounds = params_xgboost$nrounds
 )
 
-model_lgb <- lightgbm_train(
+model_lightgbm <- lightgbm_train(
   data = x_train,
   label = y_train,
   params = list(
     objective = "binary",
-    learning_rate = params_lgb$learning_rate,
-    num_iterations = params_lgb$num_iterations,
-    max_depth = params_lgb$max_depth,
-    num_leaves = 2^params_lgb$max_depth - 1
+    learning_rate = params_lightgbm$learning_rate,
+    num_iterations = params_lightgbm$num_iterations,
+    max_depth = params_lightgbm$max_depth,
+    num_leaves = 2^params_lightgbm$max_depth - 1
   ),
   verbose = -1
 )
 
-model_cat <- catboost_train(
-  catboost_load_pool(data = x_train, label = y_train), NULL,
+model_catboost <- catboost_train(
+  catboost_load_pool(data = x_train, label = y_train),
+  NULL,
   params = list(
     loss_function = "Logloss",
-    iterations = params_cat$iterations,
-    depth = params_cat$depth,
+    iterations = params_catboost$iterations,
+    depth = params_catboost$depth,
     logging_level = "Silent"
   )
 )
 ```
 
-xgboost:
+### xgboost
 
 ```{r}
-roc_xgb_tr <- roc(y_train, predict(model_xgb, x_train), quiet = TRUE)
-roc_xgb_te <- roc(y_test, predict(model_xgb, x_test), quiet = TRUE)
-roc_xgb_tr$auc
-roc_xgb_te$auc
+roc_xgboost_train <- pROC::roc(
+  y_train,
+  predict(model_xgboost, x_train),
+  quiet = TRUE
+)
+roc_xgboost_test <- pROC::roc(
+  y_test,
+  predict(model_xgboost, x_test),
+  quiet = TRUE
+)
+roc_xgboost_train$auc
+roc_xgboost_test$auc
 ```
 
-lightgbm:
+### lightgbm
 
 ```{r}
-roc_lgb_tr <- roc(y_train, predict(model_lgb, x_train), quiet = TRUE)
-roc_lgb_te <- roc(y_test, predict(model_lgb, x_test), quiet = TRUE)
-roc_lgb_tr$auc
-roc_lgb_te$auc
+roc_lightgbm_train <- pROC::roc(
+  y_train,
+  predict(model_lightgbm, x_train),
+  quiet = TRUE
+)
+roc_lightgbm_test <- pROC::roc(
+  y_test,
+  predict(model_lightgbm, x_test),
+  quiet = TRUE
+)
+roc_lightgbm_train$auc
+roc_lightgbm_test$auc
 ```
 
-catboost:
+### catboost
 
 ```{r}
-roc_cat_tr <- roc(
+roc_catboost_train <- pROC::roc(
   y_train,
   catboost_predict(
-    model_cat,
+    model_catboost,
     catboost_load_pool(data = x_train, label = NULL)
   ),
   quiet = TRUE
 )
-roc_cat_te <- roc(
+roc_catboost_test <- pROC::roc(
   y_test,
   catboost_predict(
-    model_cat,
+    model_catboost,
     catboost_load_pool(data = x_test, label = NULL)
   ),
   quiet = TRUE
 )
-roc_cat_tr$auc
-roc_cat_te$auc
+roc_catboost_train$auc
+roc_catboost_test$auc
 ```
 
-Summarize the AUC values in a table:
+### Tabular summary
+
+We can summarize the AUC values in a table.
 
 ```{r, echo=FALSE}
 df <- as.data.frame(matrix(NA, ncol = 4, nrow = 2))
 names(df) <- c("stackgbm", "xgboost", "lightgbm", "catboost")
 rownames(df) <- c("Training", "Testing")
 
-df$stackgbm <- c(roc_stack_tr$auc, roc_stack_te$auc)
-df$xgboost <- c(roc_xgb_tr$auc, roc_xgb_te$auc)
-df$lightgbm <- c(roc_lgb_tr$auc, roc_lgb_te$auc)
-df$catboost <- c(roc_cat_tr$auc, roc_cat_te$auc)
+df$stackgbm <- c(roc_stackgbm_train$auc, roc_stackgbm_test$auc)
+df$xgboost <- c(roc_xgboost_train$auc, roc_xgboost_test$auc)
+df$lightgbm <- c(roc_lightgbm_train$auc, roc_lightgbm_test$auc)
+df$catboost <- c(roc_catboost_train$auc, roc_catboost_test$auc)
 
-knitr::kable(df, digits = 4, caption = "AUC values from four models on training and testing set")
+knitr::kable(
+  df,
+  digits = 4,
+  caption = "AUC values from four models on training and testing set"
+)
 ```
 
-Plot the ROC curves on the independent test set:
+### ROC curves
+
+Plot the ROC curves of all models on the independent test set.
 
 ```{r}
 #| roc-curves,
@@ -231,10 +260,10 @@ Plot the ROC curves on the independent test set:
 #| out.width="65%"
 pal <- c("#e15759", "#f28e2c", "#59a14f", "#4e79a7", "#76b7b2")
 
-plot(smooth(roc_stack_te), col = pal[1], lwd = 1)
-plot(smooth(roc_xgb_te), col = pal[2], lwd = 1, add = TRUE)
-plot(smooth(roc_lgb_te), col = pal[3], lwd = 1, add = TRUE)
-plot(smooth(roc_cat_te), col = pal[4], lwd = 1, add = TRUE)
+plot(pROC::smooth(roc_stackgbm_test), col = pal[1], lwd = 1)
+plot(pROC::smooth(roc_xgboost_test), col = pal[2], lwd = 1, add = TRUE)
+plot(pROC::smooth(roc_lightgbm_test), col = pal[3], lwd = 1, add = TRUE)
+plot(pROC::smooth(roc_catboost_test), col = pal[4], lwd = 1, add = TRUE)
 legend(
   "bottomright",
   col = pal,

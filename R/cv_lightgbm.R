@@ -108,11 +108,14 @@ cv_lightgbm <- function(
   best_max_depth <- df_grid$max_depth[best_row]
   best_learning_rate <- df_grid$learning_rate[best_row]
 
-  list(
-    df = df_grid,
-    metric = best_metric,
-    num_iterations = best_num_iterations,
-    max_depth = best_max_depth,
-    learning_rate = best_learning_rate
+  structure(
+    list(
+      "df" = df_grid,
+      "metric" = best_metric,
+      "num_iterations" = best_num_iterations,
+      "max_depth" = best_max_depth,
+      "learning_rate" = best_learning_rate
+    ),
+    class = c("cv_params", "cv_lightgbm")
   )
 }
