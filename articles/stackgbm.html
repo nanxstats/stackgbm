@@ -156,17 +156,7 @@ the stacking model later.</p>
 <span>    cat.iterations <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">iterations</span>,</span>
 <span>    cat.depth <span class="op">=</span> <span class="va">params_cat</span><span class="op">$</span><span class="va">depth</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in .get_default_num_threads(): Optional package 'RhpcBLASctl' not</span></span>
-<span><span class="co">#&gt; found. Will use default number of OpenMP threads.</span></span>
-<span><span class="co">#&gt; Warning in .get_default_num_threads(): Optional package 'RhpcBLASctl' not</span></span>
-<span><span class="co">#&gt; found. Will use default number of OpenMP threads.</span></span>
-<span><span class="co">#&gt; Warning in .get_default_num_threads(): Optional package 'RhpcBLASctl' not</span></span>
-<span><span class="co">#&gt; found. Will use default number of OpenMP threads.</span></span>
-<span><span class="co">#&gt; Warning in .get_default_num_threads(): Optional package 'RhpcBLASctl' not</span></span>
-<span><span class="co">#&gt; found. Will use default number of OpenMP threads.</span></span>
-<span><span class="co">#&gt; Warning in .get_default_num_threads(): Optional package 'RhpcBLASctl' not</span></span>
-<span><span class="co">#&gt; found. Will use default number of OpenMP threads.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="inference">Inference<a class="anchor" aria-label="anchor" href="#inference"></a>
@@ -209,8 +199,6 @@ individually:</p>
 <span>  <span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="op">-</span><span class="fl">1</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in .get_default_num_threads(): Optional package 'RhpcBLASctl' not</span></span>
-<span><span class="co">#&gt; found. Will use default number of OpenMP threads.</span></span>
 <span></span>
 <span><span class="va">model_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/catboost_train.html">catboost_train</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/catboost_load_pool.html">catboost_load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_train</span>, label <span class="op">=</span> <span class="va">y_train</span><span class="op">)</span>, <span class="cn">NULL</span>,</span>
