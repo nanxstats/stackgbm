@@ -18,7 +18,7 @@
 #' @importFrom stats glm binomial
 #' @importFrom progress progress_bar
 #'
-#' @export stackgbm
+#' @export
 #'
 #' @examplesIf is_installed_xgboost() && is_installed_lightgbm() && is_installed_catboost()
 #' sim_data <- msaenet::msaenet.sim.binomial(
