@@ -13,8 +13,9 @@
 #'   This parameter is equivalent to `eta` in XGBoost,
 #'   `learning_rate` in LightGBM, and ignored in CatBoost.
 #'
-#' @return A list where the names are the parameter names and the values
-#'   are vectors of possible values for those parameters.
+#' @return
+#' A list where the names are the parameter names and the values
+#' are vectors of possible values for those parameters.
 #'
 #' @export
 #'

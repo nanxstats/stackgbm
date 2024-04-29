@@ -1,13 +1,14 @@
 #' Make predictions from a stackgbm model object
 #'
-#' @param object stackgbm model object
-#' @param newx New predictor matrix
+#' @param object A stackgbm model object.
+#' @param newx New predictor matrix.
 #' @param threshold Decision threshold. Default is 0.5.
 #' @param classes The class encoding vector of the predicted outcome.
-#' The naming and order will be respected.
-#' @param ... unused
+#'   The naming and order will be respected.
+#' @param ... Unused.
 #'
-#' @return A list of two vectors presenting the predicted classification
+#' @return
+#' A list of two vectors presenting the predicted classification
 #' probabilities and predicted response.
 #'
 #' @method predict stackgbm

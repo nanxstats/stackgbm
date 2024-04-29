@@ -7,16 +7,16 @@
 \method{predict}{stackgbm}(object, newx, threshold = 0.5, classes = c(1L, 0L), ...)
 }
 \arguments{
-\item{object}{stackgbm model object}
+\item{object}{A stackgbm model object.}
 
-\item{newx}{New predictor matrix}
+\item{newx}{New predictor matrix.}
 
 \item{threshold}{Decision threshold. Default is 0.5.}
 
 \item{classes}{The class encoding vector of the predicted outcome.
 The naming and order will be respected.}
 
-\item{...}{unused}
+\item{...}{Unused.}
 }
 \value{
 A list of two vectors presenting the predicted classification

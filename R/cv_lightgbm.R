@@ -11,8 +11,9 @@
 #' @param seed Random seed for reproducibility.
 #' @param verbose Show progress?
 #'
-#' @return A data frame containing the complete tuning grid and the AUC values,
-#'   with the best parameter combination and the highest AUC value.
+#' @return
+#' A data frame containing the complete tuning grid and the AUC values,
+#' with the best parameter combination and the highest AUC value.
 #'
 #' @export
 #'
