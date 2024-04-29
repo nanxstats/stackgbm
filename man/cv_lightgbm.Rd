@@ -52,20 +52,18 @@ sim_data <- msaenet::msaenet.sim.binomial(
   seed = 42
 )
 
-params <- suppressWarnings(
-  cv_lightgbm(
-    sim_data$x.tr,
-    sim_data$y.tr,
-    params = cv_param_grid(
-      n_iterations = c(100, 200),
-      max_depth = c(3, 5),
-      learning_rate = c(0.1, 0.5)
-    ),
-    n_folds = 5,
-    n_threads = 1,
-    seed = 42,
-    verbose = FALSE
-  )
+params <- cv_lightgbm(
+  sim_data$x.tr,
+  sim_data$y.tr,
+  params = cv_param_grid(
+    n_iterations = c(100, 200),
+    max_depth = c(3, 5),
+    learning_rate = c(0.1, 0.5)
+  ),
+  n_folds = 5,
+  n_threads = 1,
+  seed = 42,
+  verbose = FALSE
 )
 
 params$df

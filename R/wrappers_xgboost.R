@@ -19,10 +19,8 @@
 #'   seed = 42
 #' )
 #'
-#' x_train <- xgboost_dmatrix(sim_data$x.tr, label = sim_data$y.tr)
-#' x_train
-#' x_test <- xgboost_dmatrix(sim_data$x.te)
-#' x_test
+#' xgboost_dmatrix(sim_data$x.tr, label = sim_data$y.tr)
+#' xgboost_dmatrix(sim_data$x.te)
 xgboost_dmatrix <- function(data, label = NULL, ...) {
   rlang::check_installed("xgboost", reason = "to create a dataset")
   cl <- if (is.null(label)) {
