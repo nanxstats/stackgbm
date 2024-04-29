@@ -91,8 +91,79 @@ probabilities and predicted response.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Check the vignette for code examples</span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu">msaenet</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html" class="external-link">msaenet.sim.binomial</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>  p <span class="op">=</span> <span class="fl">50</span>,</span></span>
+<span class="r-in"><span>  rho <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">25</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  snr <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  p.train <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">params_xgboost</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"nrounds"</span> <span class="op">=</span> <span class="fl">200</span>, <span class="st">"eta"</span> <span class="op">=</span> <span class="fl">0.05</span>, <span class="st">"max_depth"</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cv_params"</span>, <span class="st">"cv_xgboost"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">params_lightgbm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"num_iterations"</span> <span class="op">=</span> <span class="fl">200</span>, <span class="st">"max_depth"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"learning_rate"</span> <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cv_params"</span>, <span class="st">"cv_lightgbm"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">params_catboost</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"iterations"</span> <span class="op">=</span> <span class="fl">100</span>, <span class="st">"depth"</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cv_params"</span>, <span class="st">"cv_catboost"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="stackgbm.html">stackgbm</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>,</span></span>
+<span class="r-in"><span>  <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">params_xgboost</span>,</span></span>
+<span class="r-in"><span>    <span class="va">params_lightgbm</span>,</span></span>
+<span class="r-in"><span>    <span class="va">params_catboost</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, newx <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">x.te</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0.2558388 0.8338682 0.4763339 0.7455671 0.7555156 0.4501782 0.6574596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [8] 0.6873576 0.6074110 0.7224988 0.6203971 0.1248982 0.1049472 0.8220409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [15] 0.6851230 0.5846914 0.5835061 0.5298453 0.7929988 0.5336065 0.2955900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [22] 0.5721034 0.5700517 0.3002608 0.6401235 0.1874141 0.7710912 0.1618248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [29] 0.8386701 0.7695612 0.4402864 0.1992083 0.6331777 0.8200990 0.4218807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [36] 0.2643347 0.8592997 0.7089676 0.7501508 0.7205304 0.2207929 0.7868003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [43] 0.8154183 0.1770900 0.2803560 0.6606686 0.8833260 0.7457455 0.8560005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [50] 0.7094953 0.3406476 0.1916315 0.7985752 0.1767514 0.3400872 0.4278666</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [57] 0.6809678 0.6107685 0.8609919 0.8872117 0.1540449 0.1187717 0.1254577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [64] 0.1908997 0.3769435 0.8531140 0.5552780 0.2471893 0.7503111 0.1293596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [71] 0.7032663 0.7448972 0.7595124 0.7960718 0.4391058 0.1525627 0.7314911</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [78] 0.2305579 0.7240893 0.2710769 0.4536461 0.8297858 0.4800380 0.7763404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [85] 0.8802614 0.1624562 0.6632567 0.6769455 0.2806485 0.2053429 0.8185189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [92] 0.5896262 0.1936939 0.7244081 0.3690217 0.8760344 0.1216465 0.3907955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [99] 0.5570389 0.2036074 0.4433538 0.8425489 0.3575423 0.3402744 0.8941558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [106] 0.4540316 0.1979951 0.8648425 0.5952020 0.1428748 0.1353298 0.8469107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [113] 0.1137851 0.6688770 0.8405698 0.7519721 0.5995734 0.8981029 0.3791713</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [120] 0.1964506 0.1208158 0.5446650 0.6865582 0.3288822 0.6390536 0.8760625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [127] 0.7542827 0.5631108 0.8979796 0.7153561 0.7489923 0.8415314 0.7956702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [134] 0.6311619 0.7230946 0.4559731 0.4489978 0.2873997 0.2933466 0.2392487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [141] 0.4506560 0.7583894 0.8599918 0.7691481 0.8316580 0.7875238 0.7244116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [148] 0.8302520 0.2416988 0.4758154 0.4926572 0.4272542 0.6020090 0.5788977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [155] 0.1144688 0.6329210 0.8999377 0.6190683 0.3689636 0.6348878 0.5609031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [162] 0.6726094 0.8749991 0.8718587 0.7209973 0.8046897 0.1514194 0.8438966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [169] 0.7098198 0.7401077 0.7184328 0.4137849 0.5942843 0.1694689 0.8406573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [176] 0.2947972 0.2482770 0.3138458 0.8490076 0.6213917 0.2340607 0.5202677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [183] 0.4311952 0.1190806 0.1396242 0.6837508 0.6065134 0.8807227 0.7196326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [190] 0.7747397 0.5394947 0.5879715 0.4708010 0.3819530 0.2171342 0.5964147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [197] 0.1617649 0.7513241 0.8646198 0.1626774</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $resp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0 1 0 1 1 0 1 1 1 1 1 0 0 1 1 1 1 1 1 1 0 1 1 0 1 0 1 0 1 1 0 0 1 1 0 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 1 1 1 0 1 1 0 0 1 1 1 1 1 0 0 1 0 0 0 1 1 1 1 0 0 0 0 0 1 1 0 1 0 1 1 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 0 0 1 0 1 0 0 1 0 1 1 0 1 1 0 0 1 1 0 1 0 1 0 0 1 0 0 1 0 0 1 0 0 1 1 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [112] 1 0 1 1 1 1 1 0 0 0 1 1 0 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [149] 0 0 0 0 1 1 0 1 1 1 0 1 1 1 1 1 1 1 0 1 1 1 1 0 1 0 1 0 0 0 1 1 0 1 0 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [186] 1 1 1 1 1 1 1 0 0 0 1 0 1 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

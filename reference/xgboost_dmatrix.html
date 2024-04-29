@@ -90,11 +90,9 @@
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">x_train</span> <span class="op">&lt;-</span> <span class="fu">xgboost_dmatrix</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>, label <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x_train</span></span></span>
+<span class="r-in"><span><span class="fu">xgboost_dmatrix</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>, label <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> xgb.DMatrix  dim: 80 x 10  info: label  colnames: no</span>
-<span class="r-in"><span><span class="va">x_test</span> <span class="op">&lt;-</span> <span class="fu">xgboost_dmatrix</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">x.te</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x_test</span></span></span>
+<span class="r-in"><span><span class="fu">xgboost_dmatrix</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">x.te</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> xgb.DMatrix  dim: 20 x 10  info: NA  colnames: no</span>
 </code></pre></div>
     </div>

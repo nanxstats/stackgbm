@@ -120,20 +120,18 @@ with the best parameter combination and the highest AUC value.</p>
 <span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu">cv_lightgbm</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>,</span></span>
-<span class="r-in"><span>    <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span>,</span></span>
-<span class="r-in"><span>    params <span class="op">=</span> <span class="fu"><a href="cv_param_grid.html">cv_param_grid</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      n_iterations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      max_depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      learning_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span>,</span></span>
-<span class="r-in"><span>    n_folds <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>    n_threads <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>    seed <span class="op">=</span> <span class="fl">42</span>,</span></span>
-<span class="r-in"><span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu">cv_lightgbm</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>,</span></span>
+<span class="r-in"><span>  <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="cv_param_grid.html">cv_param_grid</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    n_iterations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    max_depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    learning_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  n_folds <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  n_threads <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span>,</span></span>
+<span class="r-in"><span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">params</span><span class="op">$</span><span class="va">df</span></span></span>

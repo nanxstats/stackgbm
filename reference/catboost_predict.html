@@ -84,8 +84,34 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example code</span></span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu">msaenet</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html" class="external-link">msaenet.sim.binomial</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  n <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  p <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>  rho <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  snr <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  p.train <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>  seed <span class="op">=</span> <span class="fl">42</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="catboost_load_pool.html">catboost_load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">x.tr</span>, label <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">y.tr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="catboost_load_pool.html">catboost_load_pool</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sim_data</span><span class="op">$</span><span class="va">x.te</span>, label <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="catboost_train.html">catboost_train</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x_train</span>,</span></span>
+<span class="r-in"><span>  <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    loss_function <span class="op">=</span> <span class="st">"Logloss"</span>,</span></span>
+<span class="r-in"><span>    iterations <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>    depth <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>    logging_level <span class="op">=</span> <span class="st">"Silent"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">catboost_predict</span><span class="op">(</span><span class="va">fit</span>, <span class="va">x_test</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.6489797 0.6749884 0.3331358 0.5018237 0.7541328 0.3806107 0.2357996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4752205 0.7186610 0.4027660 0.2351567 0.7293696 0.5726987 0.3565523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.2649454 0.5513967 0.3885718 0.6271439 0.3863992 0.5583793</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
