@@ -1,18 +1,25 @@
 Package: stackgbm
-Type: Package
 Title: Stacked Gradient Boosting Machines
 Version: 0.1.0
 Authors@R: c(
     person("Nan", "Xiao", email = "me@nanx.me", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0250-5673")))
-Maintainer: Nan Xiao <me@nanx.me>
 Description: A minimalist implementation of model stacking
-    for boosted tree models built by 'xgboost', 'lightgbm', and 'catboost'.
+    by Wolpert (1992) <doi:10.1016/S0893-6080(05)80023-1>
+    for boosted tree models built by
+    'xgboost' <doi:10.1145/2939672.2939785>,
+    'lightgbm' <https://dl.acm.org/doi/10.5555/3294996.3295074>,
+    and 'catboost' <https://dl.acm.org/doi/abs/10.5555/3327757.3327770>.
+    A classic, two-layer stacking model is implemented, where the first layer
+    generates features using gradient boosting trees, and the second layer
+    employs a logistic regression model that uses these features as inputs.
+    It aims to provide a simple and efficient way to combine multiple gradient
+    boosting models to improve predictive model performance and robustness.
 License: MIT + file LICENSE
 URL: https://nanx.me/stackgbm/, https://github.com/nanxstats/stackgbm
+BugReports: https://github.com/nanxstats/stackgbm/issues
 Encoding: UTF-8
 VignetteBuilder: knitr
-BugReports: https://github.com/nanxstats/stackgbm/issues
 Depends: R (>= 3.5.0)
 Imports:
     pROC,

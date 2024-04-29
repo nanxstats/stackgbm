@@ -7,7 +7,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A minimalist implementation of model stacking for boosted tree models built by 'xgboost', 'lightgbm', and 'catboost'.
+A minimalist implementation of model stacking by Wolpert (1992) \doi{10.1016/S0893-6080(05)80023-1} for boosted tree models built by 'xgboost' \doi{10.1145/2939672.2939785}, 'lightgbm' \url{https://dl.acm.org/doi/10.5555/3294996.3295074}, and 'catboost' \url{https://dl.acm.org/doi/abs/10.5555/3327757.3327770}. A classic, two-layer stacking model is implemented, where the first layer generates features using gradient boosting trees, and the second layer employs a logistic regression model that uses these features as inputs. It aims to provide a simple and efficient way to combine multiple gradient boosting models to improve predictive model performance and robustness.
 }
 \seealso{
 Useful links:
