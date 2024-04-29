@@ -130,6 +130,8 @@ roc_stackgbm_test$auc
 
 Let's compare the predictive performance between the stacking model and
 the three types of tree boosting models (base learners) fitted individually.
+Note that the models and performance metrics should be (bitwise) reproducible
+on the same operating system but they might vary on different platforms.
 
 ```{r, message=FALSE}
 model_xgboost <- xgboost_train(
