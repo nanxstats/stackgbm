@@ -31,9 +31,7 @@ sim_data <- msaenet::msaenet.sim.binomial(
   seed = 42
 )
 
-x_train <- xgboost_dmatrix(sim_data$x.tr, label = sim_data$y.tr)
-x_train
-x_test <- xgboost_dmatrix(sim_data$x.te)
-x_test
+xgboost_dmatrix(sim_data$x.tr, label = sim_data$y.tr)
+xgboost_dmatrix(sim_data$x.te)
 \dontshow{\}) # examplesIf}
 }

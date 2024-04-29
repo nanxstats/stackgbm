@@ -21,7 +21,40 @@
 #' @export stackgbm
 #'
 #' @examplesIf is_installed_xgboost() && is_installed_lightgbm() && is_installed_catboost()
-#' # Check the vignette for code examples
+#' sim_data <- msaenet::msaenet.sim.binomial(
+#'   n = 1000,
+#'   p = 50,
+#'   rho = 0.6,
+#'   coef = rnorm(25, mean = 0, sd = 10),
+#'   snr = 1,
+#'   p.train = 0.8,
+#'   seed = 42
+#' )
+#'
+#' params_xgboost <- structure(
+#'   list("nrounds" = 200, "eta" = 0.05, "max_depth" = 3),
+#'   class = c("cv_params", "cv_xgboost")
+#' )
+#' params_lightgbm <- structure(
+#'   list("num_iterations" = 200, "max_depth" = 3, "learning_rate" = 0.05),
+#'   class = c("cv_params", "cv_lightgbm")
+#' )
+#' params_catboost <- structure(
+#'   list("iterations" = 100, "depth" = 3),
+#'   class = c("cv_params", "cv_catboost")
+#' )
+#'
+#' fit <- stackgbm(
+#'   sim_data$x.tr,
+#'   sim_data$y.tr,
+#'   params = list(
+#'     params_xgboost,
+#'     params_lightgbm,
+#'     params_catboost
+#'   )
+#' )
+#'
+#' predict(fit, newx = sim_data$x.te)
 stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
   set.seed(seed)
   nrow_x <- nrow(x)
