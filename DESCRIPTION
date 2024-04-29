@@ -2,7 +2,7 @@ Package: stackgbm
 Title: Stacked Gradient Boosting Machines
 Version: 0.1.0
 Authors@R: c(
-    person("Nan", "Xiao", email = "me@nanx.me", role = c("aut", "cre"),
+    person("Nan", "Xiao", email = "me@nanx.me", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-0250-5673")))
 Description: A minimalist implementation of model stacking
     by Wolpert (1992) <doi:10.1016/S0893-6080(05)80023-1>

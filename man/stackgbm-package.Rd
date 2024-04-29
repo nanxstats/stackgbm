@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Nan Xiao \email{me@nanx.me} (\href{https://orcid.org/0000-0002-0250-5673}{ORCID})
+\strong{Maintainer}: Nan Xiao \email{me@nanx.me} (\href{https://orcid.org/0000-0002-0250-5673}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}
