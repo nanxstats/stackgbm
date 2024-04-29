@@ -13,13 +13,21 @@ and catboost ([Prokhorenkova et al., 2018](https://dl.acm.org/doi/abs/10.5555/33
 
 ## Installation
 
-Install from GitHub:
+The easiest way to get stackgbm is to install from CRAN:
 
 ```r
+install.packages("stackgbm")
+```
+
+Alternatively, to use a new feature or get a bug fix,
+you can install the development version of stackgbm from GitHub:
+
+```r
+# install.packages("remotes")
 remotes::install_github("nanxstats/stackgbm")
 ```
 
-To install all dependencies, check out the instructions from
+To install all potential dependencies, check out the instructions from
 [manage dependencies](https://github.com/nanxstats/stackgbm/wiki/Manage-dependencies).
 
 ## Model
