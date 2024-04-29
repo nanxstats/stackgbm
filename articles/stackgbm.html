@@ -177,7 +177,9 @@ the stacking model later.</p>
 </h2>
 <p>Let’s compare the predictive performance between the stacking model
 and the three types of tree boosting models (base learners) fitted
-individually.</p>
+individually. Note that the models and performance metrics should be
+(bitwise) reproducible on the same operating system but they might vary
+on different platforms.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_xgboost</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/xgboost_train.html">xgboost_train</a></span><span class="op">(</span></span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
