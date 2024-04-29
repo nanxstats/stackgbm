@@ -109,11 +109,14 @@ cv_xgboost <- function(
   best_eta <- df_grid$eta[best_row]
   best_max_depth <- df_grid$max_depth[best_row]
 
-  list(
-    df = df_grid,
-    metric = best_metric,
-    nrounds = best_nrounds,
-    eta = best_eta,
-    max_depth = best_max_depth
+  structure(
+    list(
+      "df" = df_grid,
+      "metric" = best_metric,
+      "nrounds" = best_nrounds,
+      "eta" = best_eta,
+      "max_depth" = best_max_depth
+    ),
+    class = c("cv_params", "cv_xgboost")
   )
 }

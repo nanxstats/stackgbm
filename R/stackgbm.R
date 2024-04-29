@@ -6,8 +6,9 @@
 #'
 #' @param x Predictor matrix.
 #' @param y Response vector.
-#' @param params A list of optimal parameters for boosted tree models.
-#'   Can be derived from [cv_xgboost()], [cv_lightgbm()], and [cv_catboost()].
+#' @param params A list of optimal parameter objects for boosted tree models
+#'   derived from [cv_xgboost()], [cv_lightgbm()], and [cv_catboost()].
+#'   The order does not matter.
 #' @param n_folds Number of folds. Default is 5.
 #' @param seed Random seed for reproducibility.
 #' @param verbose Show progress?
@@ -35,6 +36,11 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
   x_glm <- matrix(NA, nrow = nrow_x, ncol = 3L)
   colnames(x_glm) <- c("xgb", "lgb", "cat")
 
+  # Parse parameter objects based on their class ----
+  params_xgb <- params[[which(sapply(params, inherits, "cv_xgboost"))]]
+  params_lgb <- params[[which(sapply(params, inherits, "cv_lightgbm"))]]
+  params_cat <- params[[which(sapply(params, inherits, "cv_catboost"))]]
+
   # xgboost ----
   pb <- progress_bar$new(
     format = "  fitting xgboost model [:bar] :percent in :elapsed",
@@ -57,11 +63,11 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
       params = list(
         objective = "binary:logistic",
         eval_metric = "auc",
-        max_depth = params$xgb.max_depth,
-        eta = params$xgb.eta
+        max_depth = params_xgb$max_depth,
+        eta = params_xgb$eta
       ),
       data = xtrain,
-      nrounds = params$xgb.nrounds
+      nrounds = params_xgb$nrounds
     )
 
     model_xgb[[i]] <- fit
@@ -88,10 +94,10 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
       label = ytrain,
       params = list(
         objective = "binary",
-        learning_rate = params$lgb.learning_rate,
-        num_iterations = params$lgb.num_iterations,
-        max_depth = params$lgb.max_depth,
-        num_leaves = 2^params$lgb.max_depth - 1
+        learning_rate = params_lgb$learning_rate,
+        num_iterations = params_lgb$num_iterations,
+        max_depth = params_lgb$max_depth,
+        num_leaves = 2^params_lgb$max_depth - 1
       ),
       verbose = -1
     )
@@ -121,8 +127,8 @@ stackgbm <- function(x, y, params, n_folds = 5L, seed = 42, verbose = TRUE) {
       train_pool, NULL,
       params = list(
         loss_function = "Logloss",
-        iterations = params$cat.iterations,
-        depth = params$cat.depth,
+        iterations = params_cat$iterations,
+        depth = params_cat$depth,
         logging_level = "Silent"
       )
     )

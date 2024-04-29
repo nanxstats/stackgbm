@@ -80,10 +80,13 @@ cv_catboost <- function(
   best_iterations <- df_grid$iterations[best_row]
   best_depth <- df_grid$depth[best_row]
 
-  list(
-    df = df_grid,
-    metric = best_metric,
-    iterations = best_iterations,
-    depth = best_depth
+  structure(
+    list(
+      "df" = df_grid,
+      "metric" = best_metric,
+      "iterations" = best_iterations,
+      "depth" = best_depth
+    ),
+    class = c("cv_params", "cv_catboost")
   )
 }
