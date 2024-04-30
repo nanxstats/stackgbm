@@ -3,6 +3,7 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/nanxstats/stackgbm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nanxstats/stackgbm/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/stackgbm)](https://cran.r-project.org/package=stackgbm)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/stackgbm)](https://cran.r-project.org/package=stackgbm)
 <!-- badges: end -->
 
 stackgbm offers a minimalist, research-oriented implementation of model stacking
