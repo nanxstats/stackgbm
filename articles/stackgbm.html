@@ -112,11 +112,15 @@ set and the rest 200 will be in the (independent) test set. 25 out of
 the 50 features will be informative and follows <span class="math inline">\(N(0, 10)\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu">msaenet</span><span class="fu">::</span><span class="fu"><a href="https://nanx.me/msaenet/reference/msaenet.sim.binomial.html" class="external-link">msaenet.sim.binomial</a></span><span class="op">(</span></span>
-<span>  n <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  p <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  rho <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">25</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span>  snr <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">5000</span>,</span>
+<span>  p <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  rho <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  snr <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  p.train <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span>
@@ -168,9 +172,9 @@ the stacking model later.</p>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">roc_stackgbm_train</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.9663</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.874</span></span>
 <span><span class="va">roc_stackgbm_test</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.7835</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.7016</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="performance-evaluation">Performance evaluation<a class="anchor" aria-label="anchor" href="#performance-evaluation"></a>
@@ -230,9 +234,9 @@ on different platforms.</p>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">roc_xgboost_train</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.9931</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.8891</span></span>
 <span><span class="va">roc_xgboost_test</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.7827</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.6934</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="lightgbm">lightgbm<a class="anchor" aria-label="anchor" href="#lightgbm"></a>
@@ -249,9 +253,9 @@ on different platforms.</p>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">roc_lightgbm_train</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.9915</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.8768</span></span>
 <span><span class="va">roc_lightgbm_test</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.784</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.6915</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="catboost">catboost<a class="anchor" aria-label="anchor" href="#catboost"></a>
@@ -274,9 +278,9 @@ on different platforms.</p>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">roc_catboost_train</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.9328</span></span>
+<span><span class="co">#&gt; Area under the curve: 0.8697</span></span>
 <span><span class="va">roc_catboost_test</span><span class="op">$</span><span class="va">auc</span></span>
-<span><span class="co">#&gt; Area under the curve: 0.7751</span></span></code></pre></div>
+<span><span class="co">#&gt; Area under the curve: 0.7017</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="tabular-summary">Tabular summary<a class="anchor" aria-label="anchor" href="#tabular-summary"></a>
@@ -295,17 +299,17 @@ set</caption>
 <tbody>
 <tr class="odd">
 <td align="left">Training</td>
-<td align="right">0.9663</td>
-<td align="right">0.9931</td>
-<td align="right">0.9915</td>
-<td align="right">0.9328</td>
+<td align="right">0.8740</td>
+<td align="right">0.8891</td>
+<td align="right">0.8768</td>
+<td align="right">0.8697</td>
 </tr>
 <tr class="even">
 <td align="left">Testing</td>
-<td align="right">0.7835</td>
-<td align="right">0.7827</td>
-<td align="right">0.7840</td>
-<td align="right">0.7751</td>
+<td align="right">0.7016</td>
+<td align="right">0.6934</td>
+<td align="right">0.6915</td>
+<td align="right">0.7017</td>
 </tr>
 </tbody>
 </table>
