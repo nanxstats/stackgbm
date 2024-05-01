@@ -50,11 +50,15 @@ the rest 200 will be in the (independent) test set.
 
 ```{r}
 sim_data <- msaenet::msaenet.sim.binomial(
-  n = 1000,
-  p = 50,
-  rho = 0.6,
-  coef = rnorm(25, mean = 0, sd = 10),
-  snr = 1,
+  n = 5000,
+  p = 100,
+  rho = 0.8,
+  coef = c(
+    rnorm(20, mean = 0, sd = 5),
+    rnorm(20, mean = 0, sd = 2),
+    rnorm(20, mean = 0, sd = 1)
+  ),
+  snr = 0.5,
   p.train = 0.8,
   seed = 42
 )
