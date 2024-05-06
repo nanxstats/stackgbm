@@ -8,8 +8,9 @@
 #' @param n_threads The number of parallel threads for
 #'   fitting individual models. Default is 1.
 #'
-#' @return A data frame containing the complete tuning grid and the AUC values,
-#'   with the best parameter combination and the highest AUC value.
+#' @return
+#' A data frame containing the complete tuning grid and the AUC values,
+#' with the best parameter combination and the highest AUC value.
 #'
 #' @importFrom pROC auc
 #' @importFrom foreach foreach
@@ -73,7 +74,7 @@ cv_xgboost <- function(
     .errorhandling = "pass",
     .options.future = list(seed = TRUE)
   ) %dofuture% {
-    pb(sprintf("Param set: %g", idx_param_set))
+    pb(sprintf("Param set: %d", idx_param_set))
 
     pred_probs <- matrix(NA, ncol = 2L, nrow = nrow_x)
     colnames(pred_probs) <- c("label", "prob")

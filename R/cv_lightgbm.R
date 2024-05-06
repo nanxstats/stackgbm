@@ -76,7 +76,7 @@ cv_lightgbm <- function(
     .errorhandling = "pass",
     .options.future = list(seed = TRUE)
   ) %dofuture% {
-    pb(sprintf("Param set: %g", idx_param_set))
+    pb(sprintf("Param set: %d", idx_param_set))
 
     pred_probs <- matrix(NA, ncol = 2L, nrow = nrow_x)
     colnames(pred_probs) <- c("label", "prob")
