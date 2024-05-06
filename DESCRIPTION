@@ -21,8 +21,10 @@ Encoding: UTF-8
 VignetteBuilder: knitr
 Depends: R (>= 3.5.0)
 Imports:
+    doFuture,
+    foreach,
+    progressr,
     pROC,
-    progress,
     rlang
 Suggests:
     knitr,

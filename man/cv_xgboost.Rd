@@ -5,15 +5,7 @@
 \title{xgboost - parameter tuning and model selection with k-fold cross-validation
 and grid search}
 \usage{
-cv_xgboost(
-  x,
-  y,
-  params = cv_param_grid(),
-  n_folds = 5,
-  n_threads = 1,
-  seed = 42,
-  verbose = TRUE
-)
+cv_xgboost(x, y, params = cv_param_grid(), n_folds = 5, n_threads = 1)
 }
 \arguments{
 \item{x}{Predictor matrix.}
@@ -24,13 +16,8 @@ cv_xgboost(
 
 \item{n_folds}{Number of folds. Default is 5.}
 
-\item{n_threads}{The number of parallel threads. For optimal speed,
-match this to the number of physical CPU cores, not threads.
-See respective model documentation for more details. Default is 1.}
-
-\item{seed}{Random seed for reproducibility.}
-
-\item{verbose}{Show progress?}
+\item{n_threads}{The number of parallel threads for
+fitting individual models. Default is 1.}
 }
 \value{
 A data frame containing the complete tuning grid and the AUC values,
@@ -42,6 +29,9 @@ and grid search
 }
 \examples{
 \dontshow{if (is_installed_xgboost()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(doFuture)
+library(progressr)
+
 sim_data <- msaenet::msaenet.sim.binomial(
   n = 100,
   p = 10,
@@ -52,6 +42,9 @@ sim_data <- msaenet::msaenet.sim.binomial(
   seed = 42
 )
 
+set.seed(42)
+plan(sequential)
+
 params <- cv_xgboost(
   sim_data$x.tr,
   sim_data$y.tr,
@@ -61,9 +54,7 @@ params <- cv_xgboost(
     learning_rate = c(0.1, 0.5)
   ),
   n_folds = 5,
-  n_threads = 1,
-  seed = 42,
-  verbose = FALSE
+  n_threads = 1
 )
 
 params$df
